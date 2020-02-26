@@ -1,0 +1,90 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+    Properties versionProps = new Properties()
+    def versionPropsFile = file("${project.rootDir}/version.properties")
+    versionProps.load(new FileInputStream(versionPropsFile))
+    def value = 0
+    def runTasks = gradle.startParameter.taskNames
+    if ('assemble' in runTasks || 'assembleRelease' in runTasks) {
+        value = 1
+    }
+    def versionMajor = 1
+    def versionPatch = versionProps['VERSION_PATCH'].toInteger() + 1
+    def versionBuild = versionProps['VERSION_BUILD'].toInteger()
+    def versionNumber = versionProps['VERSION_NUMBER'].toInteger() + value
+
+    if (versionPatch % 100 == 0) {
+        versionBuild += 1
+        versionPatch = 1
+    }
+
+    versionProps['VERSION_PATCH'] = versionPatch.toString()
+    versionProps['VERSION_BUILD'] = versionBuild.toString()
+    versionProps['VERSION_NUMBER'] = versionNumber.toString()
+    versionProps.store(versionPropsFile.newWriter(), null)
+
+    defaultConfig {
+        applicationId "com.frestoinc.sampleapp_kotlin"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode versionNumber
+        versionName "${versionMajor}.${versionPatch}.${versionBuild}(${versionNumber})"
+        archivesBaseName = versionName
+        setProperty("archivesBaseName", "${applicationId}-v${versionName}")
+        multiDexEnabled true
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            ext.enableCrashlytics = false
+            minifyEnabled false
+            resValue "string", "app_version", "${defaultConfig.versionName}${".debug"}"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    testOptions {
+        animationsDisabled true
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
+
+    lintOptions {
+        lintConfig file("${project.rootDir}/config/lint/lint.xml")
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    def timber_version = "4.7.1"
+    implementation "com.jakewharton.timber:timber:$timber_version"
+}

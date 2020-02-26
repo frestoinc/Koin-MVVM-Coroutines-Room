@@ -8,4 +8,24 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--Theme.MaterialComponents.Light.NoActionBar-->
+    <style name="NoBarAppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- <item name="actionOverflowMenuStyle">@style/PopupMenu</item>-->
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">2.0dp</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="ToolbarSubtitleTheme" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">21sp</item>
+        <item name="android:textColor">@color/title_color</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
 </resources>

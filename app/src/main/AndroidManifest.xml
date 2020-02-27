@@ -3,7 +3,7 @@
     package="com.frestoinc.sampleapp_kotlin">
 
     <application
-        android:name="com.frestoinc.BaseApplication"
+        android:name=".api.base.BaseApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

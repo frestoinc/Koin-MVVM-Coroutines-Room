@@ -1,7 +1,7 @@
 package com.frestoinc.sampleapp_kotlin.api.remote
 
+import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.ResponseHandler
-import com.frestoinc.sampleapp_kotlin.api.state.Resource
 
 
 /**

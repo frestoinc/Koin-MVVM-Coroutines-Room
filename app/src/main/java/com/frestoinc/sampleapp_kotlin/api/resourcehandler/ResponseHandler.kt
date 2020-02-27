@@ -1,6 +1,5 @@
 package com.frestoinc.sampleapp_kotlin.api.resourcehandler
 
-import com.frestoinc.sampleapp_kotlin.api.state.Resource
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 

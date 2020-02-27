@@ -1,4 +1,4 @@
-package com.frestoinc
+package com.frestoinc.sampleapp_kotlin.api.base
 
 import android.app.Application
 import com.frestoinc.sampleapp_kotlin.di.appModule

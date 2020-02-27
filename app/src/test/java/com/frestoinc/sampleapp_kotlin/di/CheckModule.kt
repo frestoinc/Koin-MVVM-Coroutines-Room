@@ -14,7 +14,7 @@ class CheckModule : KoinTest {
 
     @Test
     fun checkModule() {
-        startKoin { modules(appModule) }
+        startKoin { modules(listOf(appModule, repoModule)) }
     }
 
     @After

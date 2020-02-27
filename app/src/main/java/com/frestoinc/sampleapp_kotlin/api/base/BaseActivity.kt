@@ -1,4 +1,4 @@
-package com.frestoinc.api.base
+package com.frestoinc.sampleapp_kotlin.api.base
 
 import androidx.databinding.ViewDataBinding
 

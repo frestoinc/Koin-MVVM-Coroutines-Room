@@ -24,5 +24,4 @@ class BaseApplication : Application() {
             modules(appModule)
         }
     }
-
 }

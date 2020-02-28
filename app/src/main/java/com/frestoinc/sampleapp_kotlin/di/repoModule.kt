@@ -2,6 +2,7 @@ package com.frestoinc.sampleapp_kotlin.di
 
 import com.frestoinc.sampleapp_kotlin.api.remote.Repo
 import com.frestoinc.sampleapp_kotlin.api.remote.baseURL
+import com.frestoinc.sampleapp_kotlin.api.resourcehandler.ResponseHandler
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
@@ -15,6 +16,10 @@ import java.util.concurrent.TimeUnit
  * Created by frestoinc on 28,February,2020 for SampleApp_Kotlin.
  */
 val repoModule = module {
+
+    factory {
+        ResponseHandler()
+    }
 
     single {
         Retrofit.Builder()

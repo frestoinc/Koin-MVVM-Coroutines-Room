@@ -7,6 +7,6 @@ import retrofit2.http.GET
  */
 interface RemoteApi {
 
-    @GET("repositories")
+    @GET(retrofitField)
     suspend fun getRepositories(): List<Repo>
 }

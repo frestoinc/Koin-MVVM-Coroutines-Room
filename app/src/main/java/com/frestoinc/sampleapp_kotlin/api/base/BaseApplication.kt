@@ -2,7 +2,9 @@ package com.frestoinc.sampleapp_kotlin.api.base
 
 import android.app.Application
 import com.frestoinc.sampleapp_kotlin.di.appModule
-import com.frestoinc.sampleapp_kotlin.di.repoModule
+import com.frestoinc.sampleapp_kotlin.di.networkModule
+import com.frestoinc.sampleapp_kotlin.di.remoteModule
+import com.frestoinc.sampleapp_kotlin.di.roomModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -22,7 +24,14 @@ class BaseApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@BaseApplication)
-            modules(listOf(appModule, repoModule))
+            modules(
+                listOf(
+                    appModule,
+                    networkModule,
+                    roomModule,
+                    remoteModule
+                )
+            )
         }
     }
 }

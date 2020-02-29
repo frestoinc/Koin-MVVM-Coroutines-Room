@@ -1,6 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.api.resourcehandler
 
-import com.frestoinc.sampleapp_kotlin.api.remote.Repo
+import com.frestoinc.sampleapp_kotlin.api.model.Repo
 import com.nhaarman.mockitokotlin2.mock
 import org.hamcrest.core.StringContains.containsString
 import org.junit.Assert.assertThat
@@ -18,7 +18,7 @@ import java.net.SocketTimeoutException
 @RunWith(JUnit4::class)
 class ResponseHandlerTest {
 
-    lateinit var responseHandler: ResponseHandler
+    private lateinit var responseHandler: ResponseHandler
 
     @Before
     fun setUp() {

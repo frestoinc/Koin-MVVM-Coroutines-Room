@@ -1,0 +1,149 @@
+[
+  {
+    "author": "jwasham",
+    "name": "coding-interview-university",
+    "avatar": "https://github.com/jwasham.png",
+    "url": "https://github.com/jwasham/coding-interview-university",
+    "description": "A complete computer science study plan to become a software engineer.",
+    "stars": 99962,
+    "forks": 0,
+    "currentPeriodStars": 498,
+    "builtBy": [
+      {
+        "username": "jwasham",
+        "href": "https://github.com/jwasham",
+        "avatar": "https://avatars0.githubusercontent.com/u/3771963"
+      },
+      {
+        "username": "avizmarlon",
+        "href": "https://github.com/avizmarlon",
+        "avatar": "https://avatars3.githubusercontent.com/u/24354489"
+      },
+      {
+        "username": "YoSaucedo",
+        "href": "https://github.com/YoSaucedo",
+        "avatar": "https://avatars0.githubusercontent.com/u/13459501"
+      },
+      {
+        "username": "aleen42",
+        "href": "https://github.com/aleen42",
+        "avatar": "https://avatars3.githubusercontent.com/u/9573300"
+      },
+      {
+        "username": "strollkim",
+        "href": "https://github.com/strollkim",
+        "avatar": "https://avatars2.githubusercontent.com/u/14087177"
+      }
+    ]
+  },
+  {
+    "author": "labuladong",
+    "name": "fucking-algorithm",
+    "avatar": "https://github.com/labuladong.png",
+    "url": "https://github.com/labuladong/fucking-algorithm",
+    "description": "labuladong的算法小抄，手把手撕LeetCode题目，扒各种算法套路的裤子。不仅how，还有why。",
+    "stars": 1716,
+    "forks": 0,
+    "currentPeriodStars": 636,
+    "builtBy": [
+      {
+        "username": "labuladong",
+        "href": "https://github.com/labuladong",
+        "avatar": "https://avatars0.githubusercontent.com/u/37220920"
+      }
+    ]
+  },
+  {
+    "author": "allthemusicllc",
+    "name": "atm-cli",
+    "avatar": "https://github.com/allthemusicllc.png",
+    "url": "https://github.com/allthemusicllc/atm-cli",
+    "description": "Command line tool for generating and working with MIDI files.",
+    "language": "Rust",
+    "languageColor": "#dea584",
+    "stars": 657,
+    "forks": 0,
+    "currentPeriodStars": 171,
+    "builtBy": [
+      {
+        "username": "allthemusicllc",
+        "href": "https://github.com/allthemusicllc",
+        "avatar": "https://avatars1.githubusercontent.com/u/53976615"
+      }
+    ]
+  },
+  {
+    "author": "lydiahallie",
+    "name": "javascript-questions",
+    "avatar": "https://github.com/lydiahallie.png",
+    "url": "https://github.com/lydiahallie/javascript-questions",
+    "description": "A long list of (advanced) JavaScript questions, and their explanations ✨",
+    "stars": 16055,
+    "forks": 0,
+    "currentPeriodStars": 170,
+    "builtBy": [
+      {
+        "username": "lydiahallie",
+        "href": "https://github.com/lydiahallie",
+        "avatar": "https://avatars3.githubusercontent.com/u/29451794"
+      },
+      {
+        "username": "tcoppin",
+        "href": "https://github.com/tcoppin",
+        "avatar": "https://avatars2.githubusercontent.com/u/8035204"
+      },
+      {
+        "username": "oshliaer",
+        "href": "https://github.com/oshliaer",
+        "avatar": "https://avatars0.githubusercontent.com/u/45694216"
+      },
+      {
+        "username": "SaraAli26",
+        "href": "https://github.com/SaraAli26",
+        "avatar": "https://avatars2.githubusercontent.com/u/13049064"
+      },
+      {
+        "username": "sweetmilkys",
+        "href": "https://github.com/sweetmilkys",
+        "avatar": "https://avatars0.githubusercontent.com/u/39721126"
+      }
+    ]
+  },
+  {
+    "author": "sindresorhus",
+    "name": "awesome",
+    "avatar": "https://github.com/sindresorhus.png",
+    "url": "https://github.com/sindresorhus/awesome",
+    "description": "😎 Awesome lists about all kinds of interesting topics",
+    "stars": 126952,
+    "forks": 0,
+    "currentPeriodStars": 232,
+    "builtBy": [
+      {
+        "username": "sindresorhus",
+        "href": "https://github.com/sindresorhus",
+        "avatar": "https://avatars3.githubusercontent.com/u/170270"
+      },
+      {
+        "username": "davisonio",
+        "href": "https://github.com/davisonio",
+        "avatar": "https://avatars3.githubusercontent.com/u/5341072"
+      },
+      {
+        "username": "RichardLitt",
+        "href": "https://github.com/RichardLitt",
+        "avatar": "https://avatars0.githubusercontent.com/u/910753"
+      },
+      {
+        "username": "arthurvr",
+        "href": "https://github.com/arthurvr",
+        "avatar": "https://avatars2.githubusercontent.com/u/6025224"
+      },
+      {
+        "username": "AllThingsSmitty",
+        "href": "https://github.com/AllThingsSmitty",
+        "avatar": "https://avatars0.githubusercontent.com/u/1682367"
+      }
+    ]
+  }
+]

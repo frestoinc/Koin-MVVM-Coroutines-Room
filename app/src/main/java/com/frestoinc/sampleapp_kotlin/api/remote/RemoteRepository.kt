@@ -1,5 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.api.remote
 
+import com.frestoinc.sampleapp_kotlin.api.model.Repo
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.ResponseHandler
 
@@ -16,9 +17,9 @@ interface RemoteRepository {
 class RemoteRepositoryImpl(
     private val remoteApi: RemoteApi,
     private val responseHandler: ResponseHandler
-) {
+) : RemoteRepository {
 
-    suspend fun getRemoteRepository(): Resource<List<Repo>> {
+    override suspend fun getRemoteRepository(): Resource<List<Repo>> {
         return try {
             val result = remoteApi.getRepositories()
             responseHandler.onSuccess(result)

@@ -1,10 +1,10 @@
-package com.frestoinc.sampleapp_kotlin.api.room
+package com.frestoinc.sampleapp_kotlin.api.data.room
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.frestoinc.sampleapp_kotlin.api.model.Repo
+import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 
 /**
  * Created by frestoinc on 28,February,2020 for SampleApp_Kotlin.

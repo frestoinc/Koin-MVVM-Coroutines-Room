@@ -1,4 +1,4 @@
-package com.frestoinc.sampleapp_kotlin.api.model
+package com.frestoinc.sampleapp_kotlin.api.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

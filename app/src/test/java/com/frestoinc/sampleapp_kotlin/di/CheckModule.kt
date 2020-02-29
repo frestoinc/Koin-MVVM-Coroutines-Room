@@ -20,7 +20,7 @@ class CheckModule : KoinTest {
                     appModule,
                     networkModule,
                     roomModule,
-                    remoteModule
+                    dataModule
                 )
             )
         }

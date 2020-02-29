@@ -1,16 +1,12 @@
-package com.frestoinc.sampleapp_kotlin.api.remote
+package com.frestoinc.sampleapp_kotlin.api.data.remote
 
-import com.frestoinc.sampleapp_kotlin.api.model.Repo
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.ResourceStatus
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.ResponseHandler
+import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.core.StringContains
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,8 +19,6 @@ import java.io.File
  */
 @RunWith(JUnit4::class)
 class RemoteRepositoryImplTest {
-
-    private val handler = ResponseHandler()
 
     private lateinit var remoteApi: RemoteApi
 
@@ -43,14 +37,14 @@ class RemoteRepositoryImplTest {
     fun `test for error handler`() {
         whenever(mockException.code()).thenReturn(404)
         runBlocking {
-            whenever(remoteApi.getRepositories()).thenThrow(mockException)
+            whenever(remoteApi.getRepositoriesAsync()).thenThrow(mockException)
         }
-        remoteRepository = RemoteRepositoryImpl(remoteApi, handler)
+        remoteRepository = RemoteRepositoryImpl(remoteApi)
         runBlocking {
-            assertThat(
-                remoteRepository.getRemoteRepository().message,
-                StringContains.containsString("404")
+            assertEquals(
+                remoteRepository.getRemoteRepository().exception, mockException
             )
+
             assertEquals(
                 remoteRepository.getRemoteRepository().resourceStatus,
                 ResourceStatus.ERROR
@@ -65,7 +59,7 @@ class RemoteRepositoryImplTest {
         val data: List<Repo> =
             Gson().fromJson(fileContent, object : TypeToken<List<Repo>>() {}.type)
         runBlocking {
-            whenever(remoteApi.getRepositories()).thenReturn(data)
+            whenever(remoteApi.getRepositoriesAsync()).thenReturn(data)
         }
         remoteRepository = RemoteRepositoryImpl(remoteApi, handler)
         runBlocking {
@@ -74,7 +68,7 @@ class RemoteRepositoryImplTest {
                 remoteRepository.getRemoteRepository().resourceStatus,
                 ResourceStatus.SUCCESS
             )
-            assertEquals(remoteRepository.getRemoteRepository().data?.size, 5)
+            assertEquals(remoteRepository.getRemoteRepository().data.size, 5)
         }
     }
 

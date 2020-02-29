@@ -1,6 +1,6 @@
-package com.frestoinc.sampleapp_kotlin.api.remote
+package com.frestoinc.sampleapp_kotlin.api.data.remote
 
-import com.frestoinc.sampleapp_kotlin.api.model.Repo
+import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

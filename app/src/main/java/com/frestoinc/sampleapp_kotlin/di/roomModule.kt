@@ -1,8 +1,8 @@
 package com.frestoinc.sampleapp_kotlin.di
 
 import androidx.room.Room
-import com.frestoinc.sampleapp_kotlin.api.remote.roomDB
-import com.frestoinc.sampleapp_kotlin.api.room.RepoDatabase
+import com.frestoinc.sampleapp_kotlin.api.data.remote.roomDB
+import com.frestoinc.sampleapp_kotlin.api.data.room.RepoDatabase
 import org.koin.dsl.module
 
 /**

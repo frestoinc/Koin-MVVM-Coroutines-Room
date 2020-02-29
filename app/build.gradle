@@ -155,4 +155,25 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockito_version"
     testImplementation "org.mockito:mockito-inline:$mockito_version"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+
+
+    /**
+     * Room
+     */
+    def room_version = "2.2.4"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
+    /**
+     * RxJava for Android Test
+     */
+    def rx_version = "2.2.10"
+    implementation "io.reactivex.rxjava2:rxjava:$rx_version"
+
+    /**
+     * Mock webserver for Android Test
+     */
+    def mockweb_version = '4.0.1'
+    testImplementation "com.squareup.okhttp3:mockwebserver:$mockweb_version"
 }

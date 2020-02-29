@@ -1,5 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.api.remote
 
+import com.frestoinc.sampleapp_kotlin.api.model.Repo
 import retrofit2.http.GET
 
 /**

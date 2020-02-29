@@ -1,5 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.api.remote
 
+import com.frestoinc.sampleapp_kotlin.api.model.Repo
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -32,20 +33,8 @@ class RepoTest {
 
     private val currentPeriodStars = 3
 
-    private val href = "href"
-
-    private val innerAvatar = "innerAvatar"
-
-    private val username = "username"
-
-    private val mInnerModel: List<Repo.NestedRepo> = arrayListOf()
-
     @Mock
     lateinit var model: Repo
-
-    @Mock
-    lateinit var innerModel: Repo.NestedRepo
-
 
     @Before
     fun setUp() {
@@ -60,11 +49,6 @@ class RepoTest {
         Mockito.`when`(model.stars).thenReturn(stars)
         Mockito.`when`(model.forks).thenReturn(forks)
         Mockito.`when`(model.currentPeriodStars).thenReturn(currentPeriodStars)
-        Mockito.`when`(innerModel.href).thenReturn(href)
-        Mockito.`when`(innerModel.avatar).thenReturn(innerAvatar)
-        Mockito.`when`(innerModel.username).thenReturn(username)
-
-        Mockito.`when`(model.builtBy).thenReturn(mInnerModel)
     }
 
     @Test
@@ -125,29 +109,5 @@ class RepoTest {
     fun testCurrentPeriodStars() {
         Mockito.`when`(model.currentPeriodStars).thenReturn(currentPeriodStars)
         Assert.assertEquals(3, model.currentPeriodStars)
-    }
-
-    @Test
-    fun testHref() {
-        Mockito.`when`(innerModel.href).thenReturn(href)
-        Assert.assertEquals("href", innerModel.href)
-    }
-
-    @Test
-    fun testInnerAvatar() {
-        Mockito.`when`(innerModel.avatar).thenReturn(innerAvatar)
-        Assert.assertEquals("innerAvatar", innerModel.avatar)
-    }
-
-    @Test
-    fun testUsername() {
-        Mockito.`when`(innerModel.username).thenReturn(username)
-        Assert.assertEquals("username", innerModel.username)
-    }
-
-    @Test
-    fun testArrayInnerModel() {
-        Mockito.`when`(model.builtBy).thenReturn(mInnerModel)
-        Assert.assertEquals(arrayListOf<Repo.NestedRepo>(), model.builtBy)
     }
 }

@@ -1,11 +1,13 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
+import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -34,43 +36,32 @@ class RemoteRepositoryImplTest {
     }
 
     @Test
-    fun `test for error handler`() {
+    fun testErrorHandling() {
         whenever(mockException.code()).thenReturn(404)
         runBlocking {
             whenever(remoteApi.getRepositoriesAsync()).thenThrow(mockException)
         }
         remoteRepository = RemoteRepositoryImpl(remoteApi)
         runBlocking {
-            assertEquals(
-                remoteRepository.getRemoteRepository().exception, mockException
-            )
-
-            assertEquals(
-                remoteRepository.getRemoteRepository().resourceStatus,
-                ResourceStatus.ERROR
-            )
-            assertEquals(remoteRepository.getRemoteRepository().data, null)
+            assertEquals(remoteRepository.getRemoteRepository(), Resource.error(mockException))
         }
     }
 
     @Test
-    fun `test for valid handler`() {
+    fun testValidHandling() {
         val fileContent = getJSON()
         val data: List<Repo> =
             Gson().fromJson(fileContent, object : TypeToken<List<Repo>>() {}.type)
         runBlocking {
-            whenever(remoteApi.getRepositoriesAsync()).thenReturn(data)
+            whenever(remoteApi.getRepositoriesAsync()).thenReturn(data.toDeferred())
         }
-        remoteRepository = RemoteRepositoryImpl(remoteApi, handler)
+        remoteRepository = RemoteRepositoryImpl(remoteApi)
         runBlocking {
-            assertEquals(remoteRepository.getRemoteRepository().message, null)
-            assertEquals(
-                remoteRepository.getRemoteRepository().resourceStatus,
-                ResourceStatus.SUCCESS
-            )
-            assertEquals(remoteRepository.getRemoteRepository().data.size, 5)
+            assertEquals(remoteRepository.getRemoteRepository(), Resource.success(data))
         }
     }
+
+    private fun <T> T.toDeferred() = CompletableDeferred(this)
 
     private fun getJSON(): String {
         val file = File(this.javaClass.classLoader?.getResource("mockRepo.json")?.path)

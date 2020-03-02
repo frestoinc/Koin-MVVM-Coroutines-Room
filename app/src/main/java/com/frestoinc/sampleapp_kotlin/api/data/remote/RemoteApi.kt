@@ -10,5 +10,5 @@ import retrofit2.http.GET
 interface RemoteApi {
 
     @GET(retrofitField)
-    fun getRepositoriesAsync(): Deferred<Repo>
+    fun getRepositoriesAsync(): Deferred<List<Repo>>
 }

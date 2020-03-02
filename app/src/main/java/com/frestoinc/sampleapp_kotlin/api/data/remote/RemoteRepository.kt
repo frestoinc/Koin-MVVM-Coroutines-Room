@@ -22,7 +22,7 @@ class RemoteRepositoryImpl(
     override suspend fun getRemoteRepository(): Resource<List<Repo>> {
         return when (val response = requestAwait { remoteApi.getRepositoriesAsync() }) {
             is Resource.Success -> {
-                return Resource.success(listOf(response.data))
+                return Resource.success(response.data)
             }
             is Resource.Error -> response
         }

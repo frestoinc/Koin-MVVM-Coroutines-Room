@@ -1,16 +1,13 @@
 package com.frestoinc.sampleapp_kotlin.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import com.frestoinc.sampleapp_kotlin.api.data.manager.DataManager
-import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import com.frestoinc.sampleapp_kotlin.api.data.remote.toState
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.timeout
-import com.nhaarman.mockitokotlin2.verify
+import com.frestoinc.sampleapp_kotlin.utils.getData
+import io.mockk.coEvery
+import io.mockk.mockk
+import io.mockk.unmockkAll
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +20,7 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mock
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
 /**
@@ -43,33 +41,33 @@ class MainViewModelTest {
 
     private lateinit var mainViewModel: MainViewModel
 
-    private val observer: Observer<State<List<Repo>>> = mock()
+    private val data = getData(this)
 
-    private val result = Resource.success(arrayListOf<Repo>())
+    private val result = Resource.success(data)
 
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
+        dataManager = DataManager(mockk(), mockk())
         mainViewModel = MainViewModel(dataManager)
-
-    }
-
-    @Test
-    fun testValidRepository() = coroutineTestRule.testDispatcher.runBlockingTest {
-        doReturn(result).`when`(dataManager).getRemoteRepository()
-
-        mainViewModel.getStateLiveData().observeForever(observer)
-        mainViewModel.getRepo()
-
-        verify(dataManager).getRemoteRepository()
-        verify(observer, timeout(50)).onChanged(result.toState())
-
-        assertTrue(mainViewModel.getStateLiveData().hasObservers())
-        assertEquals(mainViewModel.getStateLiveData().value, result.toState())
     }
 
     @After
     fun tearDown() {
+        unmockkAll()
+    }
+
+    @Test
+    fun testValidRepository() = coroutineTestRule.testDispatcher.runBlockingTest {
+        coEvery { dataManager.getRemoteRepository() } returns result
+
+        mainViewModel.getStateLiveData().observeForever {}
+        mainViewModel.getRemoteRepo()
+
+        verify(dataManager).getRemoteRepository()
+
+        assertTrue(mainViewModel.getStateLiveData().hasObservers())
+        assertEquals(mainViewModel.getStateLiveData().value, result.toState())
     }
 }

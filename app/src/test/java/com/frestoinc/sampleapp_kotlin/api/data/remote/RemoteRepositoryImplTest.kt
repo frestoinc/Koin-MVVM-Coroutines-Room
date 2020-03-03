@@ -1,19 +1,23 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
-import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import com.frestoinc.sampleapp_kotlin.utils.getData
-import com.frestoinc.sampleapp_kotlin.utils.toDeferred
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
+import io.mockk.unmockkAll
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotNull
 import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import retrofit2.HttpException
 
 /**
  * Created by frestoinc on 28,February,2020 for SampleApp_Kotlin.
@@ -21,45 +25,56 @@ import retrofit2.HttpException
 @RunWith(JUnit4::class)
 class RemoteRepositoryImplTest {
 
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
+
+    @MockK
     private lateinit var remoteApi: RemoteApi
 
+    @MockK
     private lateinit var remoteRepository: RemoteRepository
 
-    private lateinit var mockException: HttpException
 
     @Before
     fun setUp() {
-        remoteApi = mock()
-        mockException = mock()
+        MockKAnnotations.init(this)
+        remoteRepository = RemoteRepositoryImpl(remoteApi)
+    }
 
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test
     fun testErrorHandling() {
-        whenever(mockException.code()).thenReturn(404)
+        val result = Exception("Fail")
+        coEvery { remoteRepository.getRemoteRepository() } coAnswers { throw result }
+
         runBlocking {
-            whenever(remoteApi.getRepositoriesAsync()).thenThrow(mockException)
+            assertNotNull(remoteRepository.getRemoteRepository())
+            assert(remoteRepository.getRemoteRepository() == Resource.error(result))
+            assert(remoteRepository.getRemoteRepository().toState() is State.Error)
         }
-        remoteRepository = RemoteRepositoryImpl(remoteApi)
-        runBlocking {
-            assertEquals(remoteRepository.getRemoteRepository(), Resource.error(mockException))
-            assertEquals(
-                remoteRepository.getRemoteRepository().toState(),
-                State.Error<List<Repo>>(mockException)
-            )
-        }
+
+        coVerify { remoteRepository.getRemoteRepository() }
     }
 
     @Test
     fun testValidHandling() {
         val data = getData(this)
+        val result = Resource.success(data)
+        coEvery { remoteRepository.getRemoteRepository() } returns result
+
         runBlocking {
-            whenever(remoteApi.getRepositoriesAsync()).thenReturn(data.toDeferred())
-        }
-        remoteRepository = RemoteRepositoryImpl(remoteApi)
-        runBlocking {
-            assertEquals(remoteRepository.getRemoteRepository(), Resource.success(data))
-            assertEquals(remoteRepository.getRemoteRepository().toState(), State.success(data))
+            assert(remoteRepository.getRemoteRepository().toState() is State.Success)
+            when (val source = remoteRepository.getRemoteRepository()) {
+                is Resource.Success -> {
+                    assertNotNull(source)
+                    assertEquals(source.data, result)
+                }
+            }
+
         }
     }
 }

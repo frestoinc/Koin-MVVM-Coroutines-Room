@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.frestoinc.sampleapp_kotlin.api.base.BaseViewModel
 import com.frestoinc.sampleapp_kotlin.api.data.manager.DataManager
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
-import com.frestoinc.sampleapp_kotlin.api.data.remote.toState
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import kotlinx.coroutines.launch
@@ -19,23 +18,50 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
 
     fun getStateLiveData(): LiveData<State<List<Repo>>> = _data
 
-    fun getRepo() {
+    fun getRemoteRepo() {
         _data.postValue(State.loading())
         launch {
-            val result = dataManager.getRemoteRepository().toState()
-            _data.postValue(result)
+            when (val result = dataManager.getRemoteRepository()) {
+                is Resource.Success -> {
+                    storeRepo(result.data)
+                }
+                is Resource.Error -> postError(result)
+            }
         }
+    }
 
+    fun getLocalRepo() {
+        _data.postValue(State.loading())
+        launch {
+            when (val result = dataManager.getRoomRepo()) {
+                is Resource.Success -> _data.postValue(State.success(result.data))
+                is Resource.Error -> postError(result)
+
+            }
+        }
+    }
+
+    fun storeRepo(list: List<Repo>) {
+        _data.postValue(State.loading())
+        launch {
+            when (val result = dataManager.insert(list)) {
+                is Resource.Success -> getLocalRepo()
+                is Resource.Error -> postError(result)
+            }
+        }
     }
 
     fun deleteRepo() {
         _data.postValue(State.loading())
         launch {
-            when (val status = dataManager.deleteAll()) {
+            when (val result = dataManager.deleteAll()) {
                 is Resource.Success -> _data.postValue(State.success(arrayListOf()))
-                is Resource.Error -> _data.postValue(State.error(status.exception))
+                is Resource.Error -> postError(result)
             }
-
         }
+    }
+
+    private fun postError(result: Resource.Error) {
+        _data.postValue(State.error(result.exception))
     }
 }

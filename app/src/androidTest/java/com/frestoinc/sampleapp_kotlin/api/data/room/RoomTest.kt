@@ -43,11 +43,6 @@ class RoomTest {
 
     }
 
-    @After
-    fun tearDown() {
-        repoDatabase.close()
-    }
-
     @Test
     fun testInsert() {
         runBlocking {
@@ -64,5 +59,10 @@ class RoomTest {
             repoDao.deleteAll()
             assertEquals(repoDao.getAll().size, 0)
         }
+    }
+
+    @After
+    fun tearDown() {
+        repoDatabase.close()
     }
 }

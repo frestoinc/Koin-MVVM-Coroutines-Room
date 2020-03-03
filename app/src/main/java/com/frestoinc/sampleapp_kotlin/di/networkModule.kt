@@ -1,8 +1,8 @@
 package com.frestoinc.sampleapp_kotlin.di
 
 import com.frestoinc.sampleapp_kotlin.BuildConfig
-import com.frestoinc.sampleapp_kotlin.api.remote.RemoteApi
-import com.frestoinc.sampleapp_kotlin.api.remote.baseURL
+import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteApi
+import com.frestoinc.sampleapp_kotlin.api.data.remote.baseURL
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Cache

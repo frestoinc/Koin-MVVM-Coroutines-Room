@@ -1,4 +1,4 @@
-package com.frestoinc.sampleapp_kotlin.api.remote
+package com.frestoinc.sampleapp_kotlin.api.data.remote
 
 import org.junit.Test
 import java.io.BufferedReader

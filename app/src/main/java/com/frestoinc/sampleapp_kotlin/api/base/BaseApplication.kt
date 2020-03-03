@@ -2,8 +2,8 @@ package com.frestoinc.sampleapp_kotlin.api.base
 
 import android.app.Application
 import com.frestoinc.sampleapp_kotlin.di.appModule
+import com.frestoinc.sampleapp_kotlin.di.dataModule
 import com.frestoinc.sampleapp_kotlin.di.networkModule
-import com.frestoinc.sampleapp_kotlin.di.remoteModule
 import com.frestoinc.sampleapp_kotlin.di.roomModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -29,7 +29,7 @@ class BaseApplication : Application() {
                     appModule,
                     networkModule,
                     roomModule,
-                    remoteModule
+                    dataModule
                 )
             )
         }

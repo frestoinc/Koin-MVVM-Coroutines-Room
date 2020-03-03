@@ -1,5 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.di
 
+import com.frestoinc.sampleapp_kotlin.api.data.manager.DataManager
 import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteRepository
 import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteRepositoryImpl
 import com.frestoinc.sampleapp_kotlin.api.data.room.RoomRepository
@@ -15,5 +16,7 @@ val dataModule = module {
     factory { RemoteRepositoryImpl(get()) as RemoteRepository }
 
     factory { RoomRepositoryImpl(get()) as RoomRepository }
+
+    factory { DataManager(get(), get()) }
 
 }

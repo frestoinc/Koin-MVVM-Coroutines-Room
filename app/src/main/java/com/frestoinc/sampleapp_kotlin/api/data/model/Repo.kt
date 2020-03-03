@@ -13,45 +13,45 @@ import com.google.gson.annotations.SerializedName
 data class Repo(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long?,
 
     @ColumnInfo(name = "author")
     @SerializedName("author")
-    val author: String,
+    val author: String?,
 
     @ColumnInfo(name = "name")
     @SerializedName("name")
-    val name: String,
+    val name: String?,
 
     @ColumnInfo(name = "avatar")
     @SerializedName("avatar")
-    val avatar: String,
+    val avatar: String?,
 
     @ColumnInfo(name = "url")
     @SerializedName("url")
-    val url: String,
+    val url: String?,
 
     @ColumnInfo(name = "description")
     @SerializedName("description")
-    val description: String,
+    val description: String?,
 
     @ColumnInfo(name = "language")
     @SerializedName("language")
-    val language: String,
+    val language: String?,
 
     @ColumnInfo(name = "languageColor")
     @SerializedName("languageColor")
-    val languageColor: String,
+    val languageColor: String?,
 
     @ColumnInfo(name = "stars")
     @SerializedName("stars")
-    val stars: Int,
+    val stars: Int?,
 
     @ColumnInfo(name = "forks")
     @SerializedName("forks")
-    val forks: Int,
+    val forks: Int?,
 
     @ColumnInfo(name = "currentPeriodStars")
     @SerializedName("currentPeriodStars")
-    val currentPeriodStars: Int
+    val currentPeriodStars: Int?
 )

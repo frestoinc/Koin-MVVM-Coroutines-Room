@@ -1,6 +1,7 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import com.frestoinc.sampleapp_kotlin.utils.getData
@@ -9,10 +10,10 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -53,7 +54,7 @@ class RemoteRepositoryImplTest {
 
         runBlocking {
             assertNotNull(remoteRepository.getRemoteRepository())
-            assert(remoteRepository.getRemoteRepository() == Resource.error(result))
+            assert(remoteRepository.getRemoteRepository() == Resource.error<List<Repo>>(result))
             assert(remoteRepository.getRemoteRepository().toState() is State.Error)
         }
 

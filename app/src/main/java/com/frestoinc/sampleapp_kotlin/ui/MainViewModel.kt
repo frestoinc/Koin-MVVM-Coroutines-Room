@@ -19,34 +19,43 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
     fun getStateLiveData(): LiveData<State<List<Repo>>> = _data
 
     fun getRemoteRepo() {
+        println("getRemoteRepo")
         _data.postValue(State.loading())
         launch {
             when (val result = dataManager.getRemoteRepository()) {
-                is Resource.Success -> {
-                    storeRepo(result.data)
-                }
-                is Resource.Error -> postError(result)
+                is Resource.Success -> storeRepo(result.data!!)
+                is Resource.Error -> postError(result.exception)
             }
         }
     }
 
     fun getLocalRepo() {
+        println("getLocalRepo")
         _data.postValue(State.loading())
         launch {
             when (val result = dataManager.getRoomRepo()) {
-                is Resource.Success -> _data.postValue(State.success(result.data))
-                is Resource.Error -> postError(result)
-
+                is Resource.Success -> {
+                    if (result.data!!.isEmpty()) {
+                        getRemoteRepo()
+                    } else {
+                        _data.postValue(State.success(result.data))
+                    }
+                }
+                is Resource.Error -> postError(result.exception)
             }
         }
     }
 
     fun storeRepo(list: List<Repo>) {
+        println("storeRepo")
         _data.postValue(State.loading())
         launch {
             when (val result = dataManager.insert(list)) {
                 is Resource.Success -> getLocalRepo()
-                is Resource.Error -> postError(result)
+                is Resource.Error -> {
+                    println(result)
+                    postError(result.exception)
+                }
             }
         }
     }
@@ -56,12 +65,12 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
         launch {
             when (val result = dataManager.deleteAll()) {
                 is Resource.Success -> _data.postValue(State.success(arrayListOf()))
-                is Resource.Error -> postError(result)
+                is Resource.Error -> postError(result.exception)
             }
         }
     }
 
-    private fun postError(result: Resource.Error) {
-        _data.postValue(State.error(result.exception))
+    private fun postError(exception: Exception) {
+        _data.postValue(State.error(exception))
     }
 }

@@ -10,9 +10,11 @@ const val baseURL: String = "https://github-trending-api.now.sh/"
 const val retrofitField: String = "repositories"
 const val roomDB: String = "repo"
 
-fun <T> Resource<T>.toState(): State<T> {
+fun <T> Resource<T>.toState(): State<T?> {
     return when (this) {
         is Resource.Success -> State.success(data)
         is Resource.Error -> State.error(exception)
     }
 }
+
+const val error: String = "Error"

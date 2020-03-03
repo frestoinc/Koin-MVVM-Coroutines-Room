@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ExpandableLayout">
+        <attr name="duration" format="integer" />
+        <attr name="expanded" format="boolean" />
+        <attr name="parallax" format="float" />
+        <attr name="android:orientation" />
+    </declare-styleable>
+    <declare-styleable name="NetworkFrameLayout">
+        <attr name="textLoading" format="string" />
+    </declare-styleable>
+
+</resources>

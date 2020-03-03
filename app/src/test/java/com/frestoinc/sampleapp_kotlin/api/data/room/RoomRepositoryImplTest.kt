@@ -1,15 +1,16 @@
 package com.frestoinc.sampleapp_kotlin.api.data.room
 
+import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import com.frestoinc.sampleapp_kotlin.api.data.remote.toState
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import com.frestoinc.sampleapp_kotlin.utils.getData
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertNotNull
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -49,7 +50,7 @@ class RoomRepositoryImplTest {
 
         runBlocking {
             assertNotNull(roomRepository.getRoomRepo())
-            assert(roomRepository.getRoomRepo() == Resource.error(result))
+            assert(roomRepository.getRoomRepo() == Resource.error<List<Repo>>(result))
             assert(roomRepository.getRoomRepo().toState() is State.Error)
         }
 
@@ -68,7 +69,6 @@ class RoomRepositoryImplTest {
                     assertEquals(source.data, Resource.success(data))
                 }
             }
-
         }
     }
 

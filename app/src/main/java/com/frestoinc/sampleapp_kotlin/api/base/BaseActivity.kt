@@ -12,16 +12,16 @@ import androidx.databinding.ViewDataBinding
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatActivity() {
 
-    lateinit var viewDatabinding: T
+    private lateinit var viewDatabinding: T
 
-    lateinit var viewModel: V
+    private lateinit var viewModel: V
 
-    @get:LayoutRes
-    protected abstract var getLayoutId: Int
+    @LayoutRes
+    protected abstract fun getLayoutId(): Int
 
-    protected abstract var getViewModel: V
+    protected abstract fun getViewModel(): V
 
-    protected abstract var getBindingVariable: Int
+    protected abstract fun getBindingVariable(): Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +29,9 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
     }
 
     private fun setDataBinding() {
-        viewDatabinding = DataBindingUtil.setContentView(this, getLayoutId)
-        this.viewModel = getViewModel
-        viewDatabinding.setVariable(getBindingVariable, viewModel)
+        viewDatabinding = DataBindingUtil.setContentView(this, getLayoutId())
+        this.viewModel = getViewModel()
+        viewDatabinding.setVariable(getBindingVariable(), viewModel)
         viewDatabinding.executePendingBindings()
     }
 

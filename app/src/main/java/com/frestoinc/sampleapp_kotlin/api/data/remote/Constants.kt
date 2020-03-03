@@ -1,5 +1,12 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
+import android.graphics.Color
+import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.databinding.BindingAdapter
+import com.bumptech.glide.request.RequestOptions
+import com.frestoinc.sampleapp_kotlin.R
+import com.frestoinc.sampleapp_kotlin.api.data.glide.GlideApp
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 
@@ -18,3 +25,22 @@ fun <T> Resource<T>.toState(): State<T?> {
 }
 
 const val error: String = "Error"
+
+@BindingAdapter("imagePath")
+fun getImage(imageView: ImageView, path: String?) {
+    GlideApp.with(imageView.context)
+        .load(path)
+        .centerCrop()
+        .placeholder(R.drawable.ic_avatar)
+        .error(R.drawable.ic_avatar)
+        .fallback(R.drawable.ic_avatar)
+        .apply(RequestOptions.circleCropTransform())
+        .into(imageView)
+}
+
+@BindingAdapter("color")
+fun parseColor(textView: AppCompatTextView, stringColor: String?) {
+    val color = stringColor ?: "#FFFFFF"
+    val colorCoding = Color.parseColor(color)
+    textView.compoundDrawablesRelative[0].setTint(colorCoding)
+}

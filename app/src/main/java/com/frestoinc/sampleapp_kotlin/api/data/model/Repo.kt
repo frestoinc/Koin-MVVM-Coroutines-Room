@@ -53,5 +53,16 @@ data class Repo(
 
     @ColumnInfo(name = "currentPeriodStars")
     @SerializedName("currentPeriodStars")
-    val currentPeriodStars: Int?
+    val currentPeriodStars: Int?,
+
+    @ColumnInfo(name = "builtBy")
+    @SerializedName("builtBy")
+    val builtBy: List<NestedRepo>? = emptyList()
+)
+
+data class NestedRepo(
+
+    @ColumnInfo(name = "avatar")
+    @SerializedName("avatar")
+    val avatar: String
 )

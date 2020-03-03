@@ -89,7 +89,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     private fun initObservers() {
         getViewModel().getStateLiveData().observe(this, Observer { state ->
             when (state) {
-                is State.Loading -> mainAdapter.submitList(arrayListOf())
+                is State.Loading -> mainAdapter.submitList(emptyList())
                 is State.Success -> mainAdapter.submitList(state.data)
                 is State.Error -> println("Error()")
             }

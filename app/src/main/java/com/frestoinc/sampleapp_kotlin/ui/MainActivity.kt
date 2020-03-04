@@ -10,7 +10,6 @@ import com.frestoinc.sampleapp_kotlin.R
 import com.frestoinc.sampleapp_kotlin.api.base.BaseActivity
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import com.frestoinc.sampleapp_kotlin.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.activity_content.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -37,7 +36,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
         initView()
         initObservers()
-        loadRepo()
+        getViewModel().getLocalRepo()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -62,8 +61,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     private fun initView() {
         initToolbar()
         initRecyclerview()
+        initRefreshLayout()
         //setLoadingContainer(getViewDataBinding().loadingContainer)
     }
+
 
     private fun initToolbar() {
         val toolbar = getViewDataBinding().toolbar.customToolbar
@@ -77,13 +78,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         val decoration = DividerItemDecoration(this@MainActivity, manager.orientation)
         getViewDataBinding().content.containerRc.apply {
             mainAdapter = MainAdapter()
-            containerRc.setHasFixedSize(true)
-            containerRc.layoutManager = manager
-            containerRc.addItemDecoration(decoration)
-            containerRc.setItemViewCacheSize(10)
-            containerRc.adapter = mainAdapter
-
+            setHasFixedSize(true)
+            layoutManager = manager
+            addItemDecoration(decoration)
+            setItemViewCacheSize(10)
+            adapter = mainAdapter
         }
+    }
+
+    private fun initRefreshLayout() {
+        getViewDataBinding().content.container.setOnRefreshListener { getViewModel().getRemoteRepo() }
     }
 
     private fun initObservers() {
@@ -93,10 +97,13 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
                 is State.Success -> mainAdapter.submitList(state.data)
                 is State.Error -> println("Error()")
             }
+            removeSwipeRefreshing()
         })
     }
 
-    private fun loadRepo() {
-        getViewModel().getLocalRepo()
+    private fun removeSwipeRefreshing() {
+        if (getViewDataBinding().content.container.isRefreshing) {
+            getViewDataBinding().content.container.isRefreshing = false
+        }
     }
 }

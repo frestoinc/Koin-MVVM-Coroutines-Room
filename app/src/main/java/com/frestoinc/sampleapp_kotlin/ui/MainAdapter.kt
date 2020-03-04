@@ -21,13 +21,12 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val callback = object : DiffUtil.ItemCallback<Repo>() {
 
         override fun areItemsTheSame(oldItem: Repo, newItem: Repo): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.url == newItem.url
         }
 
         override fun areContentsTheSame(oldItem: Repo, newItem: Repo): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem == newItem
         }
-
     }
 
     private val differ = AsyncListDiffer(this, callback)
@@ -65,18 +64,12 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return 1
     }
 
-    override fun getItemId(position: Int): Long {
-        if (differ.currentList.isNotEmpty()) {
-            return differ.currentList[position].id!!
-        }
-        return 0
-    }
-
     override fun getItemCount(): Int {
         return differ.currentList.size
     }
 
     fun submitList(list: List<Repo>?) {
+        differ.submitList(null)
         differ.submitList(list)
     }
 
@@ -98,7 +91,6 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         } else {
             Collections.sort(list, comparator)
         }
-        submitList(null)
         submitList(list)
     }
 

@@ -12,7 +12,7 @@ import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 @Dao
 interface RepoDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(list: List<Repo>)
 
     @Query("DELETE FROM repo")

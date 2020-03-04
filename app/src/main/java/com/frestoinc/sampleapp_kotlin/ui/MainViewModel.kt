@@ -9,6 +9,7 @@ import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import kotlinx.coroutines.launch
 
+
 /**
  * Created by frestoinc on 27,February,2020 for SampleApp_Kotlin.
  */
@@ -46,16 +47,13 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
         }
     }
 
-    fun storeRepo(list: List<Repo>) {
+    private fun storeRepo(list: List<Repo>) {
         println("storeRepo")
         _data.postValue(State.loading())
         launch {
             when (val result = dataManager.insert(list)) {
                 is Resource.Success -> getLocalRepo()
-                is Resource.Error -> {
-                    println(result)
-                    postError(result.exception)
-                }
+                is Resource.Error -> postError(result.exception)
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.api.data.model
 
+import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
@@ -9,11 +10,8 @@ import com.google.gson.annotations.SerializedName
 /**
  * Created by frestoinc on 27,February,2020 for SampleApp_Kotlin.
  */
-@Entity(tableName = "repo", indices = [Index(value = ["author", "id"], unique = true)])
+@Entity(tableName = "repo", indices = [Index(value = ["author", "url"], unique = true)])
 data class Repo(
-
-    @PrimaryKey(autoGenerate = true)
-    val id: Long?,
 
     @ColumnInfo(name = "author")
     @SerializedName("author")
@@ -27,9 +25,11 @@ data class Repo(
     @SerializedName("avatar")
     val avatar: String?,
 
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "url")
     @SerializedName("url")
-    val url: String?,
+    val url: String,
 
     @ColumnInfo(name = "description")
     @SerializedName("description")

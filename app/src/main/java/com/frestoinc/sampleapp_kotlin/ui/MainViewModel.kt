@@ -9,7 +9,6 @@ import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import kotlinx.coroutines.launch
 
-
 /**
  * Created by frestoinc on 27,February,2020 for SampleApp_Kotlin.
  */
@@ -68,7 +67,7 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
         }
     }
 
-    private fun postError(exception: Exception) {
+    override fun postError(exception: Exception) {
         _data.postValue(State.error(exception))
     }
 }

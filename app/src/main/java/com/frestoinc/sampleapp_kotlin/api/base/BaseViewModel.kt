@@ -15,6 +15,8 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope {
 
     override val coroutineContext: CoroutineContext = job + Dispatchers.Main
 
+    abstract fun postError(exception: Exception)
+
     override fun onCleared() {
         super.onCleared()
         job.cancel()

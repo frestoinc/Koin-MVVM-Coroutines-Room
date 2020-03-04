@@ -86,6 +86,7 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     o2.stars!!.compareTo(o1.stars!!)
                 }
             }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             list.sortWith(comparator)
         } else {

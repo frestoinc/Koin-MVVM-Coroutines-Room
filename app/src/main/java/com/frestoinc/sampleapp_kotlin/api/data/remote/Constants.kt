@@ -1,6 +1,9 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
+import android.content.Context
+import android.content.IntentFilter
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
@@ -43,4 +46,11 @@ fun parseColor(textView: AppCompatTextView, stringColor: String?) {
     val color = stringColor ?: "#FFFFFF"
     val colorCoding = Color.parseColor(color)
     textView.compoundDrawablesRelative[0].setTint(colorCoding)
+}
+
+fun getNetworkFilter(): IntentFilter? {
+    val intentFilter = IntentFilter()
+    intentFilter.addAction(Context.CONNECTIVITY_SERVICE)
+    intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+    return intentFilter
 }

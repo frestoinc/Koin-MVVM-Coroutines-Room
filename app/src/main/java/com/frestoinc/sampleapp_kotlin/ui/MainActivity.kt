@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.frestoinc.sampleapp_kotlin.R
 import com.frestoinc.sampleapp_kotlin.api.base.BaseActivity
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
+import com.frestoinc.sampleapp_kotlin.api.view.network.ContentLoadingLayout
 import com.frestoinc.sampleapp_kotlin.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -30,6 +32,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun getBindingVariable(): Int {
         return com.frestoinc.sampleapp_kotlin.BR.mainViewModel
+    }
+
+    override fun getLoadingContainer(): ContentLoadingLayout {
+        loadingContainer.setOnRequestRetryListener(this)
+        return loadingContainer
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +69,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         initToolbar()
         initRecyclerview()
         initRefreshLayout()
-        //setLoadingContainer(getViewDataBinding().loadingContainer)
     }
 
 
@@ -105,5 +111,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         if (getViewDataBinding().content.container.isRefreshing) {
             getViewDataBinding().content.container.isRefreshing = false
         }
+    }
+
+    override fun onRequestRetry() {
+        getViewModel().getRemoteRepo()
     }
 }

@@ -37,12 +37,22 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
                 super.onAvailable(network)
                 println("onAvailable")
                 runOnUiThread { loadingContainer.switchEmpty() }
-
             }
 
             override fun onLost(network: Network) {
                 super.onLost(network)
                 println("onLost")
+                runOnUiThread { loadingContainer.switchError() }
+            }
+
+            override fun onLosing(network: Network, maxMsToLive: Int) {
+                super.onLosing(network, maxMsToLive)
+                println("onLosing")
+            }
+
+            override fun onUnavailable() {
+                super.onUnavailable()
+                println("onUnavailable")
                 runOnUiThread { loadingContainer.switchError() }
             }
         }

@@ -9,7 +9,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.request.RequestOptions
 import com.frestoinc.sampleapp_kotlin.R
-import com.frestoinc.sampleapp_kotlin.api.data.glide.GlideApp
+import com.frestoinc.sampleapp_kotlin.api.glide.GlideApp
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 

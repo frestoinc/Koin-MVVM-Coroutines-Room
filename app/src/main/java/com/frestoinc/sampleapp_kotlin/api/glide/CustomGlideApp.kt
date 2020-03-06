@@ -1,4 +1,4 @@
-package com.frestoinc.sampleapp_kotlin.api.data.glide
+package com.frestoinc.sampleapp_kotlin.api.glide
 
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule

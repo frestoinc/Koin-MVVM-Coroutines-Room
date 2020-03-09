@@ -11,7 +11,7 @@
 [![Release](https://img.shields.io/badge/mockk-1.9.3-brightgreen.svg)](https://mockk.io/)
 [![Release](https://img.shields.io/badge/glide-4.11.0-brightgreen.svg)](https://bumptech.github.io/glide/)
 
-### Sample application using libraries such asKoin, Coroutines, MVVM, Retrofit2, Room, Glide and more.
+### Sample application using libraries such as Koin, Coroutines, MVVM, Retrofit2, Room, Glide and more.
 
 This application will fetch JSON data from [Github trending api](https://githubtrendingapi.docs.apiary.io/#), saved onto local database (Room) and displayed in RecyclerView.
 

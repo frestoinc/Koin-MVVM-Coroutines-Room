@@ -1,6 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.di
 
-import com.frestoinc.sampleapp_kotlin.api.data.glide.CustomGlideApp
+import com.frestoinc.sampleapp_kotlin.api.glide.CustomGlideApp
 import com.frestoinc.sampleapp_kotlin.ui.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

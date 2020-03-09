@@ -10,13 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.frestoinc.sampleapp_kotlin.api.base.BaseViewHolder
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import com.frestoinc.sampleapp_kotlin.databinding.ViewholderDataBinding
-import com.frestoinc.sampleapp_kotlin.databinding.ViewholderPlaceholderBinding
 import java.util.*
 
 /**
  * Created by frestoinc on 03,March,2020 for SampleApp_Kotlin.
  */
-class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
     private val callback = object : DiffUtil.ItemCallback<Repo>() {
 
@@ -31,16 +30,8 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val differ = AsyncListDiffer(this, callback)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when (viewType) {
-            0 -> return LoadingViewHolder(
-                ViewholderPlaceholderBinding.inflate(
-                    LayoutInflater.from(
-                        parent.context
-                    ), parent, false
-                )
-            )
-        }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder(
             ViewholderDataBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -50,18 +41,8 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         )
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder) {
-            is MainViewHolder -> holder.binder.model = differ.currentList[position]
-            is LoadingViewHolder -> holder.binder.placeholder = differ.currentList[position]
-        }
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        if (differ.currentList.isEmpty()) {
-            return 0
-        }
-        return 1
+    override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
+        holder.binder.model = differ.currentList[position]
     }
 
     override fun getItemCount(): Int {
@@ -86,6 +67,7 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     o2.stars!!.compareTo(o1.stars!!)
                 }
             }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             list.sortWith(comparator)
         } else {
@@ -109,8 +91,4 @@ class MainAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
         }
     }
-
-    inner class LoadingViewHolder(val binder: ViewholderPlaceholderBinding) :
-        BaseViewHolder(binder.root)
-
 }

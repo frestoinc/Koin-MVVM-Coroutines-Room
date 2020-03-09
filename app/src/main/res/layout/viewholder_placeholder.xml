@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="placeholder"
             type="com.frestoinc.sampleapp_kotlin.api.data.model.Repo" />
@@ -11,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="74dp">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/vph_guide1"

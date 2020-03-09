@@ -1,6 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
-import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.net.ConnectivityManager
@@ -49,8 +49,7 @@ fun parseColor(textView: AppCompatTextView, stringColor: String?) {
 }
 
 fun getNetworkFilter(): IntentFilter? {
-    val intentFilter = IntentFilter()
-    intentFilter.addAction(Context.CONNECTIVITY_SERVICE)
-    intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-    return intentFilter
+    return IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {
+        addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+    }
 }

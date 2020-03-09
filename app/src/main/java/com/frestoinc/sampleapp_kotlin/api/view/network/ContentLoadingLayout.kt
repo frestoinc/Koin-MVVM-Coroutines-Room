@@ -13,11 +13,11 @@ import com.frestoinc.sampleapp_kotlin.R
 class ContentLoadingLayout(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     context,
     attrs
-), View.OnClickListener, ContentLoader {
+), View.OnClickListener, ContentLoader, NetworkState {
 
     private var errorView: View? = null
 
-    internal var state: NetState = NetState.SUCCESS
+    private var state: NetState = NetState.SUCCESS
 
     private var listener: OnRequestRetryListener? = null
 
@@ -56,6 +56,14 @@ class ContentLoadingLayout(context: Context?, attrs: AttributeSet?) : RelativeLa
     override fun switchEmpty() {
         state = NetState.SUCCESS
         switchToEmptyView()
+    }
+
+    override fun dismiss() {
+        switchToEmptyView()
+    }
+
+    override fun getState(): NetState {
+        return state
     }
 
     interface OnRequestRetryListener {

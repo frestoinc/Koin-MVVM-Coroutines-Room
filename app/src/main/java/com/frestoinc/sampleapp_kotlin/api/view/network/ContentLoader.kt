@@ -9,4 +9,5 @@ interface ContentLoader {
 
     fun switchEmpty()
 
+    fun dismiss()
 }

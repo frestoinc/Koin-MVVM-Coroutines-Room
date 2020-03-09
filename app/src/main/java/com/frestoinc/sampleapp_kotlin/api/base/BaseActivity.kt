@@ -3,6 +3,8 @@ package com.frestoinc.sampleapp_kotlin.api.base
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +12,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.frestoinc.sampleapp_kotlin.api.view.network.ContentLoadingLayout
 import com.frestoinc.sampleapp_kotlin.api.view.network.NetState
-import com.frestoinc.sampleapp_kotlin.api.view.network.NetworkState
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 
 abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatActivity(),
-    ContentLoadingLayout.OnRequestRetryListener, NetworkState {
+    ContentLoadingLayout.OnRequestRetryListener {
 
     private lateinit var viewDatabinding: T
 
@@ -26,13 +27,16 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
 
     private lateinit var container: ContentLoadingLayout
 
-    private var networkCallback: ConnectivityManager.NetworkCallback
-
     private val connectivityManager
         get() = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    init {
-        networkCallback = object : ConnectivityManager.NetworkCallback() {
+    private val networkRequest = NetworkRequest.Builder().apply {
+        addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+        addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+    }.build()
+
+
+    private var networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
                 println("onAvailable")
@@ -56,7 +60,6 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
                 runOnUiThread { loadingContainer.switchError() }
             }
         }
-    }
 
     @LayoutRes
     protected abstract fun getLayoutId(): Int
@@ -83,18 +86,22 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel> : AppCompatA
         return viewDatabinding
     }
 
-    override fun getState(): NetState {
-        return loadingContainer.state
-    }
-
     override fun onResume() {
         super.onResume()
-        connectivityManager.registerDefaultNetworkCallback(networkCallback)
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
     }
 
     override fun onPause() {
         super.onPause()
         connectivityManager.unregisterNetworkCallback(networkCallback)
+    }
+
+    override fun onBackPressed() {
+        if (loadingContainer.getState() == NetState.ERROR) {
+            loadingContainer.dismiss()
+        } else {
+            super.onBackPressed()
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-# SampleApp_Kotlin
+# SampleApp in Kotlin
 
 [![Release](https://img.shields.io/badge/kotlin-1.3.61-brightgreen.svg)](https://kotlinlang.org/)
 [![Release](https://img.shields.io/badge/materials-1.1.0-brightgreen.svg)](https://material.io/)

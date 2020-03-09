@@ -14,12 +14,27 @@ import kotlinx.coroutines.launch
  */
 class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
 
-    private val _data: MutableLiveData<State<List<Repo>>> = MutableLiveData()
+    private val _data by lazy {
+        val liveData = MutableLiveData<State<List<Repo>>>()
+        launch {
+            liveData.postValue(State.loading())
+            when (val result = dataManager.getRoomRepo()) {
+                is Resource.Success -> {
+                    if (result.data!!.isEmpty()) {
+                        getRemoteRepo()
+                    } else {
+                        liveData.postValue(State.success(result.data))
+                    }
+                }
+                is Resource.Error -> postError(result.exception)
+            }
+        }
+        return@lazy liveData
+    }
 
     fun getStateLiveData(): LiveData<State<List<Repo>>> = _data
 
     fun getRemoteRepo() {
-        println("getRemoteRepo")
         _data.postValue(State.loading())
         launch {
             when (val result = dataManager.getRemoteRepository()) {
@@ -29,8 +44,7 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
         }
     }
 
-    fun getLocalRepo() {
-        println("getLocalRepo")
+    private fun getLocalRepo() {
         _data.postValue(State.loading())
         launch {
             when (val result = dataManager.getRoomRepo()) {
@@ -47,7 +61,6 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
     }
 
     private fun storeRepo(list: List<Repo>) {
-        println("storeRepo")
         _data.postValue(State.loading())
         launch {
             when (val result = dataManager.insert(list)) {

@@ -3,7 +3,6 @@ package com.frestoinc.sampleapp_kotlin.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.frestoinc.sampleapp_kotlin.R
@@ -44,7 +43,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
         initView()
         initObservers()
-        getViewModel().getLocalRepo()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -98,11 +96,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun initObservers() {
-        getViewModel().getStateLiveData().observe(this, Observer { state ->
-            when (state) {
+        getViewModel().getStateLiveData().observeForever {
+            when (it) {
                 is State.Loading -> containerRc.showShimmerAdapter()
                 is State.Success -> {
-                    mainAdapter.submitList(state.data)
+                    mainAdapter.submitList(it.data)
                     containerRc.hideShimmerAdapter()
                 }
                 is State.Error -> {
@@ -111,7 +109,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
                 }
             }
             removeSwipeRefreshing()
-        })
+        }
     }
 
     private fun removeSwipeRefreshing() {

@@ -6,15 +6,17 @@ import com.frestoinc.sampleapp_kotlin.api.data.room.RoomRepository
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by frestoinc on 29,February,2020 for SampleApp_Kotlin.
  */
 
-class DataManager(
-    private val remoteRepository: RemoteRepository,
-    private val roomRepository: RoomRepository
-) {
+class DataManager : KoinComponent {
+
+    private val remoteRepository: RemoteRepository by inject()
+    private val roomRepository: RoomRepository by inject()
 
     suspend fun getRemoteRepository(): Resource<List<Repo>> =
         withContext(Dispatchers.Main) {

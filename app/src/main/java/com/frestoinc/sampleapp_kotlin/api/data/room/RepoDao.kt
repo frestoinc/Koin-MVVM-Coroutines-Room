@@ -1,9 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.api.data.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 
 /**
@@ -20,5 +17,12 @@ interface RepoDao {
 
     @Query("SELECT * from repo ORDER BY author ASC")
     suspend fun getAll(): List<Repo>
+
+    //todo
+    @Transaction
+    suspend fun refreshRepo(list: List<Repo>) {
+        deleteAll()
+        insert(list)
+    }
 
 }

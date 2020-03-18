@@ -78,14 +78,17 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun initRecyclerview() {
-        val manager = LinearLayoutManager(this@MainActivity)
-        val decoration = DividerItemDecoration(this@MainActivity, manager.orientation)
         getViewDataBinding().content.containerRc.apply {
             setDemoLayoutReference(R.layout.viewholder_placeholder)
             mainAdapter = MainAdapter()
             setHasFixedSize(true)
-            layoutManager = manager
-            addItemDecoration(decoration)
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            addItemDecoration(
+                DividerItemDecoration(
+                    this@MainActivity,
+                    (layoutManager as LinearLayoutManager).orientation
+                )
+            )
             setItemViewCacheSize(10)
             adapter = mainAdapter
         }

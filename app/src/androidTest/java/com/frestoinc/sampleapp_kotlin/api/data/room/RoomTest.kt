@@ -6,9 +6,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import io.reactivex.internal.util.NotificationLite.getValue
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,13 +34,12 @@ class RoomTest {
         repoDao = repoDatabase.repoDao
         repo = arrayListOf(
             Repo(
-                0, "author", "name", "avatar",
+                "author", "name", "avatar",
                 "url", "description", "language",
                 "languageColor", 1, 2,
                 3
             )
         )
-
     }
 
     @Test

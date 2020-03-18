@@ -35,8 +35,7 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
         return MainViewHolder(
             ViewholderDataBinding.inflate(
                 LayoutInflater.from(parent.context),
-                parent,
-                false
+                parent, false
             )
         )
     }

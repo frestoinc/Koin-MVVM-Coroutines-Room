@@ -1,5 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
+import com.frestoinc.sampleapp_kotlin.BuildConfig
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Repository
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
@@ -20,6 +21,9 @@ class RemoteRepositoryImpl(
 ) : RemoteRepository {
 
     override suspend fun getRemoteRepository(): Resource<List<Repo>> {
+        if (BuildConfig.DEBUG) {
+            println(remoteApi.hashCode())
+        }
         return requestAwait { remoteApi.getRepositoriesAsync() }
     }
 }

@@ -8,11 +8,15 @@ import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by frestoinc on 27,February,2020 for SampleApp_Kotlin.
  */
-class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
+class MainViewModel : BaseViewModel(), KoinComponent {
+
+    private val dataManager: DataManager by inject()
 
     private val _data by lazy {
         val liveData = MutableLiveData<State<List<Repo>>>()
@@ -52,6 +56,7 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
                     if (result.data!!.isEmpty()) {
                         getRemoteRepo()
                     } else {
+                        println(result.data)
                         _data.postValue(State.success(result.data))
                     }
                 }

@@ -19,6 +19,7 @@ import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 const val baseURL: String = "https://github-trending-api.now.sh/"
 const val retrofitField: String = "repositories"
 const val roomDB: String = "repo"
+const val CONNECT_TIMEOUT = 20L
 
 fun <T> Resource<T>.toState(): State<T?> {
     return when (this) {

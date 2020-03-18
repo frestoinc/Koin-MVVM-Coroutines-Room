@@ -28,6 +28,8 @@ class RoomRepositoryImplTest {
     @MockK
     private lateinit var roomRepository: RoomRepository
 
+    @MockK
+
     private var data = getData(this)
 
     @Before

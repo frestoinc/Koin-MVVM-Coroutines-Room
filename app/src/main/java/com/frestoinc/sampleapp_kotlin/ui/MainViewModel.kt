@@ -2,6 +2,7 @@ package com.frestoinc.sampleapp_kotlin.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.frestoinc.sampleapp_kotlin.api.base.BaseViewModel
 import com.frestoinc.sampleapp_kotlin.api.data.manager.DataManager
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
@@ -20,7 +21,7 @@ class MainViewModel : BaseViewModel(), KoinComponent {
 
     private val _data by lazy {
         val liveData = MutableLiveData<State<List<Repo>>>()
-        launch {
+        viewModelScope.launch {
             liveData.postValue(State.loading())
             when (val result = dataManager.getRoomRepo()) {
                 is Resource.Success -> {
@@ -40,7 +41,7 @@ class MainViewModel : BaseViewModel(), KoinComponent {
 
     fun getRemoteRepo() {
         _data.postValue(State.loading())
-        launch {
+        viewModelScope.launch {
             when (val result = dataManager.getRemoteRepository()) {
                 is Resource.Success -> storeRepo(result.data!!)
                 is Resource.Error -> postError(result.exception)
@@ -50,7 +51,7 @@ class MainViewModel : BaseViewModel(), KoinComponent {
 
     private fun getLocalRepo() {
         _data.postValue(State.loading())
-        launch {
+        viewModelScope.launch {
             when (val result = dataManager.getRoomRepo()) {
                 is Resource.Success -> {
                     if (result.data!!.isEmpty()) {
@@ -67,7 +68,7 @@ class MainViewModel : BaseViewModel(), KoinComponent {
 
     private fun storeRepo(list: List<Repo>) {
         _data.postValue(State.loading())
-        launch {
+        viewModelScope.launch {
             when (val result = dataManager.insert(list)) {
                 is Resource.Success -> getLocalRepo()
                 is Resource.Error -> postError(result.exception)
@@ -77,7 +78,7 @@ class MainViewModel : BaseViewModel(), KoinComponent {
 
     fun deleteRepo() {
         _data.postValue(State.loading())
-        launch {
+        viewModelScope.launch {
             when (val result = dataManager.deleteAll()) {
                 is Resource.Success -> _data.postValue(State.success(arrayListOf()))
                 is Resource.Error -> postError(result.exception)

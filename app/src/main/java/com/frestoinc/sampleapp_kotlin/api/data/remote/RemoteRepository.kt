@@ -3,7 +3,7 @@ package com.frestoinc.sampleapp_kotlin.api.data.remote
 import com.frestoinc.sampleapp_kotlin.BuildConfig
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Repository
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
+import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 
 
 /**
@@ -13,14 +13,14 @@ import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 interface RemoteRepository :
     Repository {
 
-    suspend fun getRemoteRepository(): Resource<List<Repo>>
+    suspend fun getRemoteRepository(): State<List<Repo>>
 }
 
 class RemoteRepositoryImpl(
     private val remoteApi: RemoteApi
 ) : RemoteRepository {
 
-    override suspend fun getRemoteRepository(): Resource<List<Repo>> {
+    override suspend fun getRemoteRepository(): State<List<Repo>> {
         if (BuildConfig.DEBUG) {
             println(remoteApi.hashCode())
         }

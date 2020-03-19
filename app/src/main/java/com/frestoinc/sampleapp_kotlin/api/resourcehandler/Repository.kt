@@ -10,24 +10,23 @@ interface Repository {
 
     suspend fun <T> requestAwait(
         call: () -> Deferred<T>
-    ): Resource<T> {
+    ): State<T> {
         return try {
-            val result = call().await()
-            Resource.success(result)
+            State.success(call().await())
         } catch (exception: Exception) {
             Timber.e(exception)
-            Resource.error(exception)
+            State.error(exception)
         }
     }
 
     suspend fun <T> request(
         call: suspend () -> T
-    ): Resource<T> {
+    ): State<T> {
         return try {
-            Resource.success(call())
+            State.success(call())
         } catch (exception: Exception) {
             Timber.e(exception)
-            Resource.error(exception)
+            State.error(exception)
         }
     }
 }

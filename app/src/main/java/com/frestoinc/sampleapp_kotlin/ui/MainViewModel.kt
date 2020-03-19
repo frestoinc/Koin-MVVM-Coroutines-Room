@@ -2,26 +2,46 @@ package com.frestoinc.sampleapp_kotlin.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.frestoinc.sampleapp_kotlin.api.base.BaseViewModel
 import com.frestoinc.sampleapp_kotlin.api.data.manager.DataManager
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import kotlinx.coroutines.launch
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 /**
  * Created by frestoinc on 27,February,2020 for SampleApp_Kotlin.
  */
-class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
+class MainViewModel : BaseViewModel(), KoinComponent {
 
-    private val _data: MutableLiveData<State<List<Repo>>> = MutableLiveData()
+    private val dataManager: DataManager by inject()
+
+    private val _data by lazy {
+        val liveData = MutableLiveData<State<List<Repo>>>()
+        viewModelScope.launch {
+            liveData.postValue(State.loading())
+            when (val result = dataManager.getRoomRepo()) {
+                is Resource.Success -> {
+                    if (result.data!!.isEmpty()) {
+                        getRemoteRepo()
+                    } else {
+                        liveData.postValue(State.success(result.data))
+                    }
+                }
+                is Resource.Error -> postError(result.exception)
+            }
+        }
+        return@lazy liveData
+    }
 
     fun getStateLiveData(): LiveData<State<List<Repo>>> = _data
 
     fun getRemoteRepo() {
-        println("getRemoteRepo")
         _data.postValue(State.loading())
-        launch {
+        viewModelScope.launch {
             when (val result = dataManager.getRemoteRepository()) {
                 is Resource.Success -> storeRepo(result.data!!)
                 is Resource.Error -> postError(result.exception)
@@ -29,15 +49,15 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
         }
     }
 
-    fun getLocalRepo() {
-        println("getLocalRepo")
+    private fun getLocalRepo() {
         _data.postValue(State.loading())
-        launch {
+        viewModelScope.launch {
             when (val result = dataManager.getRoomRepo()) {
                 is Resource.Success -> {
                     if (result.data!!.isEmpty()) {
                         getRemoteRepo()
                     } else {
+                        println(result.data)
                         _data.postValue(State.success(result.data))
                     }
                 }
@@ -47,9 +67,8 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
     }
 
     private fun storeRepo(list: List<Repo>) {
-        println("storeRepo")
         _data.postValue(State.loading())
-        launch {
+        viewModelScope.launch {
             when (val result = dataManager.insert(list)) {
                 is Resource.Success -> getLocalRepo()
                 is Resource.Error -> postError(result.exception)
@@ -59,7 +78,7 @@ class MainViewModel(private val dataManager: DataManager) : BaseViewModel() {
 
     fun deleteRepo() {
         _data.postValue(State.loading())
-        launch {
+        viewModelScope.launch {
             when (val result = dataManager.deleteAll()) {
                 is Resource.Success -> _data.postValue(State.success(arrayListOf()))
                 is Resource.Error -> postError(result.exception)

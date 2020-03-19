@@ -27,9 +27,9 @@ class BaseApplication : Application() {
             modules(
                 listOf(
                     appModule,
-                    networkModule,
                     roomModule,
-                    dataModule
+                    dataModule,
+                    networkModule
                 )
             )
         }

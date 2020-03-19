@@ -3,7 +3,7 @@ package com.frestoinc.sampleapp_kotlin.api.data.manager
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
 import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteRepository
 import com.frestoinc.sampleapp_kotlin.api.data.room.RoomRepository
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
+import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.core.KoinComponent
@@ -18,23 +18,18 @@ class DataManager : KoinComponent {
     private val remoteRepository: RemoteRepository by inject()
     private val roomRepository: RoomRepository by inject()
 
-    suspend fun getRemoteRepository(): Resource<List<Repo>> =
+    suspend fun getRemoteRepository(): State<List<Repo>> =
         withContext(Dispatchers.Main) {
             return@withContext remoteRepository.getRemoteRepository()
         }
 
-    suspend fun getRoomRepo(): Resource<List<Repo>> =
+    suspend fun getRoomRepo(): State<List<Repo>> =
         withContext(Dispatchers.Main) {
             return@withContext roomRepository.getRoomRepo()
         }
 
-    suspend fun insert(data: List<Repo>): Resource<Unit> =
+    suspend fun insert(data: List<Repo>): State<Unit> =
         withContext(Dispatchers.Main) {
             return@withContext roomRepository.insert(data)
-        }
-
-    suspend fun deleteAll(): Resource<Unit> =
-        withContext(Dispatchers.Main) {
-            return@withContext roomRepository.deleteAll()
         }
 }

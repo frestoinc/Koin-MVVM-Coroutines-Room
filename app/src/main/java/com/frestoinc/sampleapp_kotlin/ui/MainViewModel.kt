@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.frestoinc.sampleapp_kotlin.api.base.BaseViewModel
 import com.frestoinc.sampleapp_kotlin.api.data.manager.DataManager
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
@@ -24,14 +23,14 @@ class MainViewModel : BaseViewModel(), KoinComponent {
         viewModelScope.launch {
             liveData.postValue(State.loading())
             when (val result = dataManager.getRoomRepo()) {
-                is Resource.Success -> {
-                    if (result.data!!.isEmpty()) {
+                is State.Success -> {
+                    if (result.data.isEmpty()) {
                         getRemoteRepo()
                     } else {
                         liveData.postValue(State.success(result.data))
                     }
                 }
-                is Resource.Error -> postError(result.exception)
+                is State.Error -> postError(result.error)
             }
         }
         return@lazy liveData
@@ -43,8 +42,8 @@ class MainViewModel : BaseViewModel(), KoinComponent {
         _data.postValue(State.loading())
         viewModelScope.launch {
             when (val result = dataManager.getRemoteRepository()) {
-                is Resource.Success -> storeRepo(result.data!!)
-                is Resource.Error -> postError(result.exception)
+                is State.Success -> storeRepo(result.data)
+                is State.Error -> postError(result.error)
             }
         }
     }
@@ -53,15 +52,15 @@ class MainViewModel : BaseViewModel(), KoinComponent {
         _data.postValue(State.loading())
         viewModelScope.launch {
             when (val result = dataManager.getRoomRepo()) {
-                is Resource.Success -> {
-                    if (result.data!!.isEmpty()) {
+                is State.Success -> {
+                    if (result.data.isEmpty()) {
                         getRemoteRepo()
                     } else {
                         println(result.data)
                         _data.postValue(State.success(result.data))
                     }
                 }
-                is Resource.Error -> postError(result.exception)
+                is State.Error -> postError(result.error)
             }
         }
     }
@@ -70,18 +69,8 @@ class MainViewModel : BaseViewModel(), KoinComponent {
         _data.postValue(State.loading())
         viewModelScope.launch {
             when (val result = dataManager.insert(list)) {
-                is Resource.Success -> getLocalRepo()
-                is Resource.Error -> postError(result.exception)
-            }
-        }
-    }
-
-    fun deleteRepo() {
-        _data.postValue(State.loading())
-        viewModelScope.launch {
-            when (val result = dataManager.deleteAll()) {
-                is Resource.Success -> _data.postValue(State.success(arrayListOf()))
-                is Resource.Error -> postError(result.exception)
+                is State.Success -> getLocalRepo()
+                is State.Error -> postError(result.error)
             }
         }
     }

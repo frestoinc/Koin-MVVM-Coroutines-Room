@@ -1,8 +1,5 @@
 package com.frestoinc.sampleapp_kotlin.api.data.room
 
-import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
-import com.frestoinc.sampleapp_kotlin.api.data.remote.toState
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.Resource
 import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
 import com.frestoinc.sampleapp_kotlin.utils.getData
 import io.mockk.*
@@ -52,8 +49,7 @@ class RoomRepositoryImplTest {
 
         runBlocking {
             assertNotNull(roomRepository.getRoomRepo())
-            assert(roomRepository.getRoomRepo() == Resource.error<List<Repo>>(result))
-            assert(roomRepository.getRoomRepo().toState() is State.Error)
+            assert(roomRepository.getRoomRepo() is State.Error)
         }
 
         coVerify { roomRepository.getRoomRepo() }
@@ -61,14 +57,14 @@ class RoomRepositoryImplTest {
 
     @Test
     fun testGetLocalRepo() {
-        coEvery { roomRepository.getRoomRepo() } returns Resource.success(data)
+        coEvery { roomRepository.getRoomRepo() } returns State.success(data)
 
         runBlocking {
-            assert(roomRepository.getRoomRepo().toState() is State.Success)
+            assert(roomRepository.getRoomRepo() is State.Success)
             when (val source = roomRepository.getRoomRepo()) {
-                is Resource.Success -> {
+                is State.Success -> {
                     assertNotNull(source)
-                    assertEquals(source.data, Resource.success(data))
+                    assertEquals(source.data, State.success(data))
                 }
             }
         }
@@ -76,12 +72,12 @@ class RoomRepositoryImplTest {
 
     @Test
     fun testInsertRepo() {
-        coEvery { roomRepository.insert(data) } returns Resource.success(Unit)
+        coEvery { roomRepository.insert(data) } returns State.success(Unit)
 
         runBlocking {
-            assert(roomRepository.insert(data).toState() is State.Success)
+            assert(roomRepository.insert(data) is State.Success)
             when (val source = roomRepository.insert(data)) {
-                is Resource.Success -> {
+                is State.Success -> {
                     assertNotNull(source)
                 }
             }

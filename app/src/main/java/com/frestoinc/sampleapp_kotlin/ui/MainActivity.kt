@@ -6,8 +6,10 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.frestoinc.sampleapp_kotlin.R
-import com.frestoinc.sampleapp_kotlin.api.base.BaseActivity
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
+import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
+import com.frestoinc.sampleapp_kotlin.api.domain.base.BaseActivity
+import com.frestoinc.sampleapp_kotlin.api.domain.extension.observe
+import com.frestoinc.sampleapp_kotlin.api.domain.response.State
 import com.frestoinc.sampleapp_kotlin.api.view.network.ContentLoadingLayout
 import com.frestoinc.sampleapp_kotlin.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_content.*
@@ -95,33 +97,58 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun initRefreshLayout() {
-        getViewDataBinding().content.container.setOnRefreshListener { getViewModel().getRemoteRepo() }
-    }
-
-    private fun initObservers() {
-        getViewModel().getStateLiveData().observeForever {
-            when (it) {
-                is State.Loading -> containerRc.showShimmerAdapter()
-                is State.Success -> {
-                    mainAdapter.submitList(it.data)
-                    containerRc.hideShimmerAdapter()
-                }
-                is State.Error -> {
-                    containerRc.hideShimmerAdapter()
-                    getLoadingContainer().switchError()
+        getViewDataBinding().content.container.apply {
+            setProgressViewOffset(true, 100, 250)
+            setOnRefreshListener {
+                if (isConnected()) {
+                    getViewModel().fetchRemoteRepo()
                 }
             }
-            removeSwipeRefreshing()
         }
     }
 
+    private fun initObservers() {
+        observe(getViewModel().liveData, ::onRetrieveData)
+    }
+
+    private fun onRetrieveData(state: State<List<Repo>>?) {
+        when (state) {
+            is State.Success -> {
+                val data = state.data ?: emptyList()
+                if (data.isEmpty()) {
+                    getViewModel().fetchRemoteRepo()
+                } else {
+                    mainAdapter.submitList(data)
+                }
+                onLoading(false)
+            }
+            is State.Loading -> onLoading(true)
+            is State.Error -> onFailure()
+        }
+    }
+
+    private fun onFailure() {
+        getLoadingContainer().switchError()
+    }
+
+    private fun onLoading(isLoading: Boolean?) {
+        when (isLoading) {
+            true -> containerRc.showShimmerAdapter()
+            false -> containerRc.hideShimmerAdapter()
+        }
+        removeSwipeRefreshing()
+    }
+
     private fun removeSwipeRefreshing() {
-        if (getViewDataBinding().content.container.isRefreshing) {
-            getViewDataBinding().content.container.isRefreshing = false
+        if (container.isRefreshing) {
+            container.isRefreshing = false
         }
     }
 
     override fun onRequestRetry() {
-        getViewModel().getRemoteRepo()
+        if (isConnected()) {
+            getViewModel().fetchRemoteRepo()
+        }
+
     }
 }

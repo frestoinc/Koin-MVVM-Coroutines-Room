@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.frestoinc.sampleapp_kotlin.api.data.manager.DataManager
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
+import com.frestoinc.sampleapp_kotlin.api.domain.response.State
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -20,11 +20,12 @@ class CustomWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx
         return try {
             when (val result = dataManager.getRemoteRepository()) {
                 is State.Success -> {
-                    dataManager.insert(result.data)
+                    dataManager.insert(result.data!!)
                     Result.success()
                 }
                 else -> Result.failure()
             }
+            Result.success()
         } catch (exception: Exception) {
             Result.failure()
         }

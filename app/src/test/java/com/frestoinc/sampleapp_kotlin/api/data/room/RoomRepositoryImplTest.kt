@@ -1,13 +1,12 @@
 package com.frestoinc.sampleapp_kotlin.api.data.room
 
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
+import com.frestoinc.sampleapp_kotlin.api.domain.response.State
 import com.frestoinc.sampleapp_kotlin.utils.getData
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,8 +23,6 @@ class RoomRepositoryImplTest {
 
     @MockK
     private lateinit var roomRepository: RoomRepository
-
-    @MockK
 
     private var data = getData(this)
 
@@ -45,26 +42,26 @@ class RoomRepositoryImplTest {
     @Test
     fun testErrorHandling() {
         val result = Exception("Fail")
-        coEvery { roomRepository.getRoomRepo() } coAnswers { throw result }
+        coEvery { roomRepository.getRoomRepository() } coAnswers { throw result }
 
         runBlocking {
-            assertNotNull(roomRepository.getRoomRepo())
-            assert(roomRepository.getRoomRepo() is State.Error)
+            assertNotNull(roomRepository.getRoomRepository())
+            assert(roomRepository.getRoomRepository() is State.Error)
         }
 
-        coVerify { roomRepository.getRoomRepo() }
+        coVerify { roomRepository.getRoomRepository() }
     }
 
     @Test
     fun testGetLocalRepo() {
-        coEvery { roomRepository.getRoomRepo() } returns State.success(data)
+        coEvery { roomRepository.getRoomRepository() } returns State.Success(data)
 
         runBlocking {
-            assert(roomRepository.getRoomRepo() is State.Success)
-            when (val source = roomRepository.getRoomRepo()) {
+            assert(roomRepository.getRoomRepository() is State.Success)
+            when (val source = roomRepository.getRoomRepository()) {
                 is State.Success -> {
-                    assertNotNull(source)
-                    assertEquals(source.data, State.success(data))
+                    assertNotNull(source.data)
+                    assertEquals(source.data, data)
                 }
             }
         }
@@ -72,13 +69,14 @@ class RoomRepositoryImplTest {
 
     @Test
     fun testInsertRepo() {
-        coEvery { roomRepository.insert(data) } returns State.success(Unit)
+        coEvery { roomRepository.insert(data) } returns State.Success(Unit)
 
         runBlocking {
             assert(roomRepository.insert(data) is State.Success)
             when (val source = roomRepository.insert(data)) {
                 is State.Success -> {
                     assertNotNull(source)
+                    assertNull(source.ex)
                 }
             }
         }

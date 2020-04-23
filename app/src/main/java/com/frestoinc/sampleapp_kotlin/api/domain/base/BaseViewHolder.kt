@@ -1,4 +1,4 @@
-package com.frestoinc.sampleapp_kotlin.api.base
+package com.frestoinc.sampleapp_kotlin.api.domain.base
 
 import android.view.View
 import androidx.annotation.NonNull

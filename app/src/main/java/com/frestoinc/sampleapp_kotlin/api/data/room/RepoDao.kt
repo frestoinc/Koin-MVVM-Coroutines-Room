@@ -18,7 +18,6 @@ interface RepoDao {
     @Query("SELECT * from repo ORDER BY author ASC")
     suspend fun getAll(): List<Repo>
 
-    //todo
     @Transaction
     suspend fun refreshRepo(list: List<Repo>) {
         deleteAll()

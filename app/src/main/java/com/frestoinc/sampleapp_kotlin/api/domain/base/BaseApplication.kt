@@ -1,4 +1,4 @@
-package com.frestoinc.sampleapp_kotlin.api.base
+package com.frestoinc.sampleapp_kotlin.api.domain.base
 
 import android.app.Application
 import androidx.work.Constraints
@@ -6,7 +6,6 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.frestoinc.sampleapp_kotlin.di.appModule
-import com.frestoinc.sampleapp_kotlin.di.dataModule
 import com.frestoinc.sampleapp_kotlin.di.networkModule
 import com.frestoinc.sampleapp_kotlin.di.roomModule
 import com.frestoinc.sampleapp_kotlin.service.CustomWorker
@@ -35,7 +34,6 @@ class BaseApplication : Application() {
                 listOf(
                     appModule,
                     roomModule,
-                    dataModule,
                     networkModule
                 )
             )

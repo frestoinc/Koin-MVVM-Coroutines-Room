@@ -1,7 +1,8 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
-import kotlinx.coroutines.Deferred
+import com.frestoinc.sampleapp_kotlin.api.domain.extension.retrofitField
+import retrofit2.Response
 import retrofit2.http.GET
 
 /**
@@ -10,5 +11,5 @@ import retrofit2.http.GET
 interface RemoteApi {
 
     @GET(retrofitField)
-    fun getRepositoriesAsync(): Deferred<List<Repo>>
+    suspend fun getRepositoriesAsync(): Response<List<Repo>>
 }

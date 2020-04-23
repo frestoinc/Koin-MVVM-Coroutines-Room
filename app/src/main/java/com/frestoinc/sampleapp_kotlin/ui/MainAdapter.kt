@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.frestoinc.sampleapp_kotlin.api.base.BaseViewHolder
 import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
+import com.frestoinc.sampleapp_kotlin.api.domain.base.BaseViewHolder
 import com.frestoinc.sampleapp_kotlin.databinding.ViewholderDataBinding
 import java.util.*
 

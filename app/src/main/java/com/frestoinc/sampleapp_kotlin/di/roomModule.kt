@@ -1,12 +1,10 @@
 package com.frestoinc.sampleapp_kotlin.di
 
 import androidx.room.Room
-import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteRepository
-import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteRepositoryImpl
-import com.frestoinc.sampleapp_kotlin.api.data.remote.roomDB
 import com.frestoinc.sampleapp_kotlin.api.data.room.RepoDatabase
 import com.frestoinc.sampleapp_kotlin.api.data.room.RoomRepository
 import com.frestoinc.sampleapp_kotlin.api.data.room.RoomRepositoryImpl
+import com.frestoinc.sampleapp_kotlin.api.domain.extension.roomDB
 import org.koin.dsl.module
 
 /**
@@ -21,12 +19,9 @@ val roomModule = module {
             .build()
     }
 
-    single<RemoteRepository> { RemoteRepositoryImpl(get()) }
-
     single<RoomRepository> { RoomRepositoryImpl(get()) }
 
     single {
         get<RepoDatabase>().repoDao
     }
-
 }

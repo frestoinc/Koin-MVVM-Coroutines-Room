@@ -1,5 +1,7 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
+import com.frestoinc.sampleapp_kotlin.api.domain.extension.baseURL
+import com.frestoinc.sampleapp_kotlin.api.domain.extension.retrofitField
 import org.junit.Test
 import java.io.BufferedReader
 import java.io.IOException

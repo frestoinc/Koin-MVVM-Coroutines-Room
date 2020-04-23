@@ -2,7 +2,9 @@ package com.frestoinc.sampleapp_kotlin.di
 
 import com.frestoinc.sampleapp_kotlin.BuildConfig
 import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteApi
-import com.frestoinc.sampleapp_kotlin.api.data.remote.baseURL
+import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteRepository
+import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteRepositoryImpl
+import com.frestoinc.sampleapp_kotlin.api.domain.extension.baseURL
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
@@ -42,6 +44,8 @@ val networkModule = module {
         }.build()
 
     }
+
+    single<RemoteRepository> { RemoteRepositoryImpl(get()) }
 
     single { GsonBuilder().create() }
 

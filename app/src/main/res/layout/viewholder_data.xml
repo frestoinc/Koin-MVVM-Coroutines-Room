@@ -11,7 +11,7 @@
 
         <variable
             name="constant"
-            type="com.frestoinc.sampleapp_kotlin.api.data.remote.ConstantsKt" />
+            type="com.frestoinc.sampleapp_kotlin.api.domain.extension.ConstantsKt" />
 
         <variable
             name="model"

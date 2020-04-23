@@ -1,4 +1,4 @@
-package com.frestoinc.sampleapp_kotlin.api.data.remote
+package com.frestoinc.sampleapp_kotlin.api.domain.extension
 
 import android.content.Intent
 import android.content.IntentFilter
@@ -17,7 +17,6 @@ import com.frestoinc.sampleapp_kotlin.api.glide.GlideApp
 const val baseURL: String = "https://github-trending-api.now.sh/"
 const val retrofitField: String = "repositories"
 const val roomDB: String = "repo"
-const val CONNECT_TIMEOUT = 20L
 
 const val error: String = "Error"
 

@@ -3,9 +3,8 @@ package com.frestoinc.sampleapp_kotlin.ui
 import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.frestoinc.sampleapp_kotlin.api.data.manager.DataManager
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
+import com.frestoinc.sampleapp_kotlin.api.domain.response.State
 import com.frestoinc.sampleapp_kotlin.di.appModule
-import com.frestoinc.sampleapp_kotlin.di.dataModule
 import com.frestoinc.sampleapp_kotlin.di.networkModule
 import com.frestoinc.sampleapp_kotlin.di.roomModule
 import com.frestoinc.sampleapp_kotlin.utils.getData
@@ -55,7 +54,7 @@ class MainViewModelTest : KoinTest {
 
     private val data = getData(this)
 
-    private val result1 = State.success(data)
+    private val result1 = State.Success(data)
 
     @Before
     fun setUp() {
@@ -67,8 +66,7 @@ class MainViewModelTest : KoinTest {
                 listOf(
                     appModule,
                     networkModule,
-                    roomModule,
-                    dataModule
+                    roomModule
                 )
             )
         }
@@ -86,12 +84,12 @@ class MainViewModelTest : KoinTest {
     fun testValidRepository() = coroutineTestRule.testDispatcher.runBlockingTest {
         coEvery { dataManager.getRemoteRepository() } returns result1
 
-        mainViewModel.getStateLiveData().observeForever {}
-        mainViewModel.getRemoteRepo()
+        mainViewModel.liveData.observeForever {}
+        mainViewModel.fetchRemoteRepo()
 
         verify(dataManager).getRemoteRepository()
 
-        assertTrue(mainViewModel.getStateLiveData().hasObservers())
-        assertEquals(mainViewModel.getStateLiveData().value, result1)
+        assertTrue(mainViewModel.liveData.hasObservers())
+        assertEquals(mainViewModel.liveData.value, result1)
     }
 }

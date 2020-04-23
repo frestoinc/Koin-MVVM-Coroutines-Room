@@ -17,7 +17,7 @@ class NestedConverter {
                 return emptyList()
             }
             val type = object : TypeToken<List<NestedRepo>>() {}.type
-            return Gson().fromJson<List<NestedRepo>>(data, type)
+            return Gson().fromJson(data, type)
         }
 
         @TypeConverter

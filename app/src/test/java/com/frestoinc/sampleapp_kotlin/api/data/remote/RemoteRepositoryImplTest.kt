@@ -1,7 +1,7 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.frestoinc.sampleapp_kotlin.api.resourcehandler.State
+import com.frestoinc.sampleapp_kotlin.api.domain.response.State
 import com.frestoinc.sampleapp_kotlin.utils.getData
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -61,18 +61,18 @@ class RemoteRepositoryImplTest {
     @Test
     fun testValidHandling() {
         val data = getData(this)
-        val result = State.success(data)
+        val result = State.Success(data)
         coEvery { remoteRepository.getRemoteRepository() } returns result
 
         runBlocking {
             assert(remoteRepository.getRemoteRepository() is State.Success)
             when (val source = remoteRepository.getRemoteRepository()) {
                 is State.Success -> {
-                    assertNotNull(source)
+                    assertNotNull(source.data)
                     assertEquals(source.data, result)
                 }
-            }
 
+            }
         }
     }
 }

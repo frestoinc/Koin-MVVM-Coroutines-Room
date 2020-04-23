@@ -29,8 +29,7 @@ class CheckModule : KoinTest {
                 listOf(
                     appModule,
                     networkModule,
-                    roomModule,
-                    dataModule
+                    roomModule
                 )
             )
         }.checkModules()

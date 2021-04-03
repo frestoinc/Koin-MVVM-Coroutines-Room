@@ -10,12 +10,12 @@
             type="android.view.View" />
 
         <variable
-            name="constant"
-            type="com.frestoinc.sampleapp_kotlin.api.domain.extension.ConstantsKt" />
+            name="appview"
+            type="com.frestoinc.sampleapp_kotlin.ui.view.ViewKt" />
 
         <variable
             name="model"
-            type="com.frestoinc.sampleapp_kotlin.api.data.model.Repo" />
+            type="com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -84,7 +84,7 @@
             app:layout_constraintTop_toBottomOf="@+id/vhd_guide5" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:text="@{model.author ?? constant.error}"
+            android:text="@{model.author ?? appview.error}"
             android:visibility="@{model.author != null ? view.VISIBLE : view.GONE}"
             android:fontFamily="@font/roboto_regular"
             android:id="@+id/vhd_author"
@@ -100,7 +100,7 @@
             app:layout_constraintTop_toBottomOf="@+id/vhd_guide6" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:text="@{model.name ?? constant.error}"
+            android:text="@{model.name ??  appview.error}"
             android:visibility="@{model.name != null ? view.VISIBLE : view.GONE}"
             android:fontFamily="@font/roboto_regular"
             android:id="@+id/vhd_name"
@@ -116,7 +116,7 @@
             app:layout_constraintStart_toStartOf="@+id/vhd_guide2"
             app:layout_constraintTop_toBottomOf="@+id/vhd_author" />
 
-        <com.frestoinc.sampleapp_kotlin.api.view.expandable.ExpandableLayout
+        <com.frestoinc.sampleapp_kotlin.ui.view.expandable.ExpandableLayout
             android:id="@+id/vex_expandable"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/pingfang"
-                    android:text="@{model.description ?? constant.error}"
+                    android:text="@{model.description ?? appview.error}"
                     android:textColor="@color/text_color"
                     android:textSize="12sp"
                     android:visibility="@{model.description != null ? view.VISIBLE : view.GONE}"
@@ -166,7 +166,7 @@
                     android:drawableStart="@drawable/ic_dot"
                     android:drawablePadding="4sp"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="@{model.language ?? constant.error}"
+                    android:text="@{model.language ?? appview.error}"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/text_size"
                     android:visibility="@{model.language != null ? view.VISIBLE : view.GONE}"
@@ -221,7 +221,7 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.frestoinc.sampleapp_kotlin.api.view.expandable.ExpandableLayout>
+        </com.frestoinc.sampleapp_kotlin.ui.view.expandable.ExpandableLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

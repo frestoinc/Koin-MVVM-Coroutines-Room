@@ -3,24 +3,21 @@ package com.frestoinc.sampleapp_kotlin.service
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.frestoinc.sampleapp_kotlin.api.data.manager.DataManager
 import com.frestoinc.sampleapp_kotlin.api.domain.response.State
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import com.frestoinc.sampleapp_kotlin.helpers.DataHelper
+import javax.inject.Inject
 
-/**
- * Created by frestoinc on 09,March,2020 for SampleApp_Kotlin.
- */
-class CustomWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params),
-    KoinComponent {
-
-    private val dataManager: DataManager by inject()
+class CustomWorker @Inject constructor(
+    private val dataHelper: DataHelper,
+    ctx: Context,
+    params: WorkerParameters
+) : CoroutineWorker(ctx, params) {
 
     override suspend fun doWork(): Result {
         return try {
-            when (val result = dataManager.getRemoteRepository()) {
+            when (val result = dataHelper.getRemoteRepository()) {
                 is State.Success -> {
-                    dataManager.insert(result.data!!)
+                    dataHelper.insert(result.data!!)
                     Result.success()
                 }
                 else -> Result.failure()

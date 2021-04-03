@@ -1,48 +1,39 @@
 package com.frestoinc.sampleapp_kotlin.ui
 
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.frestoinc.sampleapp_kotlin.R
-import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
-import com.frestoinc.sampleapp_kotlin.api.domain.base.BaseActivity
 import com.frestoinc.sampleapp_kotlin.api.domain.extension.observe
 import com.frestoinc.sampleapp_kotlin.api.domain.response.State
-import com.frestoinc.sampleapp_kotlin.api.view.network.ContentLoadingLayout
+import com.frestoinc.sampleapp_kotlin.base.BaseActivity
 import com.frestoinc.sampleapp_kotlin.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.activity_content.*
-import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.frestoinc.sampleapp_kotlin.helpers.NetworkHelper
+import com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity
+import com.frestoinc.sampleapp_kotlin.ui.trending.TrendingAdapter
+import com.frestoinc.sampleapp_kotlin.ui.trending.TrendingViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-/**
- * Created by frestoinc on 27,February,2020 for SampleApp_Kotlin.
- */
-class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
+@AndroidEntryPoint
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
-    private lateinit var mainAdapter: MainAdapter
+    @Inject
+    lateinit var trendingAdapter: TrendingAdapter
 
-    override fun getLayoutId(): Int {
-        return R.layout.activity_main
-    }
+    private val viewModel: TrendingViewModel by viewModels()
 
-    override fun getViewModel(): MainViewModel {
-        val mainViewModel: MainViewModel by viewModel()
-        return mainViewModel
-    }
+    @Inject
+    override lateinit var networkHelper: NetworkHelper
 
-    override fun getBindingVariable(): Int {
-        return com.frestoinc.sampleapp_kotlin.BR.mainViewModel
-    }
+    /* override fun getLoadingContainer(): ContentLoadingLayout {
+         loadingContainer.setOnRequestRetryListener(this)
+         return loadingContainer
+     }*/
 
-    override fun getLoadingContainer(): ContentLoadingLayout {
-        loadingContainer.setOnRequestRetryListener(this)
-        return loadingContainer
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun viewHasBeenCreated() {
         initView()
         initObservers()
     }
@@ -55,11 +46,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_name -> {
-                mainAdapter.setSortedSource(true)
+                trendingAdapter.setSortedSource(true)
                 true
             }
             R.id.menu_stars -> {
-                mainAdapter.setSortedSource(false)
+                trendingAdapter.setSortedSource(false)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -73,16 +64,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun initToolbar() {
-        val toolbar = getViewDataBinding().toolbar.customToolbar
+        val toolbar = viewDataBinding.toolbar.customToolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        getViewDataBinding().toolbar.toolbarTitle.text = getString(R.string.toolbar_title)
+        viewDataBinding.toolbar.toolbarTitle.text = getString(R.string.toolbar_title)
     }
 
     private fun initRecyclerview() {
-        getViewDataBinding().content.containerRc.apply {
-            setDemoLayoutReference(R.layout.viewholder_placeholder)
-            mainAdapter = MainAdapter()
+        viewDataBinding.content.containerRc.apply {
+            //setDemoLayoutReference(R.layout.viewholder_placeholder)
+            trendingAdapter = TrendingAdapter()
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@MainActivity)
             addItemDecoration(
@@ -92,33 +83,33 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
                 )
             )
             setItemViewCacheSize(10)
-            adapter = mainAdapter
+            adapter = trendingAdapter
         }
     }
 
     private fun initRefreshLayout() {
-        getViewDataBinding().content.container.apply {
+        viewDataBinding.content.container.apply {
             setProgressViewOffset(true, 100, 250)
             setOnRefreshListener {
                 if (isConnected()) {
-                    getViewModel().fetchRemoteRepo()
+                    viewModel.fetchRemoteRepo()
                 }
             }
         }
     }
 
     private fun initObservers() {
-        observe(getViewModel().liveData, ::onRetrieveData)
+        observe(viewModel.liveData, ::onRetrieveData)
     }
 
-    private fun onRetrieveData(state: State<List<Repo>>?) {
+    private fun onRetrieveData(state: State<List<TrendingEntity>>?) {
         when (state) {
             is State.Success -> {
                 val data = state.data ?: emptyList()
                 if (data.isEmpty()) {
-                    getViewModel().fetchRemoteRepo()
+                    viewModel.fetchRemoteRepo()
                 } else {
-                    mainAdapter.submitList(data)
+                    trendingAdapter.submitList(data)
                 }
                 onLoading(false)
             }
@@ -128,26 +119,26 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun onFailure() {
-        getLoadingContainer().switchError()
+        // getLoadingContainer().switchError()
     }
 
     private fun onLoading(isLoading: Boolean?) {
-        when (isLoading) {
+        /*when (isLoading) {
             true -> containerRc.showShimmerAdapter()
             false -> containerRc.hideShimmerAdapter()
-        }
+        }*/
         removeSwipeRefreshing()
     }
 
     private fun removeSwipeRefreshing() {
-        if (container.isRefreshing) {
+        /*if (container.isRefreshing) {
             container.isRefreshing = false
-        }
+        }*/
     }
 
     override fun onRequestRetry() {
         if (isConnected()) {
-            getViewModel().fetchRemoteRepo()
+            viewModel.fetchRemoteRepo()
         }
 
     }

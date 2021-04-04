@@ -2,11 +2,12 @@ package com.frestoinc.sampleapp_kotlin.ui
 
 import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.frestoinc.sampleapp_kotlin.api.data.manager.DataManager
 import com.frestoinc.sampleapp_kotlin.api.domain.response.State
 import com.frestoinc.sampleapp_kotlin.di.appModule
 import com.frestoinc.sampleapp_kotlin.di.networkModule
 import com.frestoinc.sampleapp_kotlin.di.roomModule
+import com.frestoinc.sampleapp_kotlin.helpers.DataHelper
+import com.frestoinc.sampleapp_kotlin.ui.trending.TrendingViewModel
 import com.frestoinc.sampleapp_kotlin.utils.getData
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -35,7 +36,7 @@ import org.mockito.Mockito.verify
  */
 @ExperimentalCoroutinesApi
 @RunWith(JUnit4::class)
-class MainViewModelTest : KoinTest {
+class TrendingViewModelTest : KoinTest {
 
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
@@ -47,10 +48,10 @@ class MainViewModelTest : KoinTest {
     private lateinit var context: Application
 
     @RelaxedMockK
-    private lateinit var dataManager: DataManager
+    private lateinit var dataHelper: DataHelper
 
     @RelaxedMockK
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var trendingViewModel: TrendingViewModel
 
     private val data = getData(this)
 
@@ -70,8 +71,8 @@ class MainViewModelTest : KoinTest {
                 )
             )
         }
-        dataManager = mockk()
-        mainViewModel = mockk()
+        dataHelper = mockk()
+        trendingViewModel = mockk()
     }
 
     @After
@@ -82,14 +83,14 @@ class MainViewModelTest : KoinTest {
 
     @Test
     fun testValidRepository() = coroutineTestRule.testDispatcher.runBlockingTest {
-        coEvery { dataManager.getRemoteRepository() } returns result1
+        coEvery { dataHelper.getRemoteRepository() } returns result1
 
-        mainViewModel.liveData.observeForever {}
-        mainViewModel.fetchRemoteRepo()
+        trendingViewModel.liveData.observeForever {}
+        trendingViewModel.fetchRemoteRepo()
 
-        verify(dataManager).getRemoteRepository()
+        verify(dataHelper).getRemoteRepository()
 
-        assertTrue(mainViewModel.liveData.hasObservers())
-        assertEquals(mainViewModel.liveData.value, result1)
+        assertTrue(trendingViewModel.liveData.hasObservers())
+        assertEquals(trendingViewModel.liveData.value, result1)
     }
 }

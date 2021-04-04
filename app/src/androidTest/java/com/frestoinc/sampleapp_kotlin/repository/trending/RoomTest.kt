@@ -1,10 +1,10 @@
-package com.frestoinc.sampleapp_kotlin.api.data.room
+package com.frestoinc.sampleapp_kotlin.repository.trending
 
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
+import com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity
 import io.reactivex.internal.util.NotificationLite.getValue
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -19,21 +19,21 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class RoomTest {
 
-    private lateinit var repoDao: RepoDao
+    private lateinit var trendingDao: TrendingDao
 
-    private lateinit var repoDatabase: RepoDatabase
+    private lateinit var trendingDatabase: TrendingDatabase
 
-    private lateinit var repo: List<Repo>
+    private lateinit var trendingEntity: List<TrendingEntity>
 
     @Before
     fun setUp() {
         val ctx = ApplicationProvider.getApplicationContext<Context>()
-        repoDatabase = Room.inMemoryDatabaseBuilder(
-            ctx, RepoDatabase::class.java
+        trendingDatabase = Room.inMemoryDatabaseBuilder(
+            ctx, TrendingDatabase::class.java
         ).build()
-        repoDao = repoDatabase.repoDao
-        repo = arrayListOf(
-            Repo(
+        trendingDao = trendingDatabase.trendingDao
+        trendingEntity = arrayListOf(
+            TrendingEntity(
                 "author", "name", "avatar",
                 "url", "description", "language",
                 "languageColor", 1, 2,
@@ -45,8 +45,8 @@ class RoomTest {
     @Test
     fun testInsert() {
         runBlocking {
-            repoDao.insert(repo)
-            val repoTest = getValue<List<Repo>>(repoDao.getAll())
+            trendingDao.insert(trendingEntity)
+            val repoTest = getValue<List<TrendingEntity>>(trendingDao.getAll())
             assertEquals(repoTest.size, 1)
         }
     }
@@ -54,14 +54,14 @@ class RoomTest {
     @Test
     fun testDelete() {
         runBlocking {
-            repoDao.insert(repo)
-            repoDao.deleteAll()
-            assertEquals(repoDao.getAll().size, 0)
+            trendingDao.insert(trendingEntity)
+            trendingDao.deleteAll()
+            assertEquals(trendingDao.getAll().size, 0)
         }
     }
 
     @After
     fun tearDown() {
-        repoDatabase.close()
+        trendingDatabase.close()
     }
 }

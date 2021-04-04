@@ -8,12 +8,18 @@ import android.widget.ImageView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.frestoinc.sampleapp_kotlin.R
 import com.frestoinc.sampleapp_kotlin.di.GlideApp
 
 const val error: String = "Error"
+
+fun <T : Any, L : LiveData<T>> LifecycleOwner.observe(liveData: L, body: (T?) -> Unit) =
+    liveData.observe(this, Observer(body))
 
 @BindingAdapter("imagePath")
 fun getImage(imageView: ImageView, path: String?) {

@@ -1,48 +1,61 @@
 package com.frestoinc.sampleapp_kotlin.ui.trending
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.frestoinc.sampleapp_kotlin.api.domain.response.State
-import com.frestoinc.sampleapp_kotlin.helpers.DataHelper
+import androidx.lifecycle.*
+import com.frestoinc.sampleapp_kotlin.models.Response
 import com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity
+import com.frestoinc.sampleapp_kotlin.repository.IRemoteRepository
+import com.frestoinc.sampleapp_kotlin.repository.IRoomRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TrendingViewModel @Inject constructor(private val dataHelper: DataHelper) : ViewModel() {
+class TrendingViewModel @Inject constructor(
+    private val remoteRepository: IRemoteRepository,
+    private val roomRepository: IRoomRepository
+) : ViewModel() {
 
-    val liveData: MutableLiveData<State<List<TrendingEntity>>> by lazy {
-        val data: MutableLiveData<State<List<TrendingEntity>>> = MutableLiveData()
-        viewModelScope.launch {
-            data.postValue(State.Loading())
-            data.postValue(dataHelper.getRoomRepository())
-        }
-        return@lazy data
+    val data: MutableLiveData<Response<List<TrendingEntity>>> = MutableLiveData()
+    val error: MutableLiveData<String> = MutableLiveData()
+
+    init {
+        loadLocal()
     }
 
-    fun fetchRemoteRepo() {
-        viewModelScope.launch {
-            liveData.postValue(State.Loading())
-            when (val response = dataHelper.getRemoteRepository()) {
-                is State.Success -> {
-                    liveData.postValue(response)
-                    if (response.data!!.isEmpty()) {
-                        liveData.postValue(State.Error(Exception("List is empty")))
-                    } else {
-                        refreshRepoList(response.data)
-                    }
+    fun onRefresh() {
+        fetchRemoteRepo()
+    }
 
-                }
-                is State.Error -> liveData.postValue(response)
+    private fun loadLocal() {
+        data.postValue(Response.Loading())
+        viewModelScope.launch {
+            when (val response = roomRepository.getTrendingFromLocal()) {
+                is Response.Success -> data.postValue(response)
+                is Response.Error -> fetchRemoteRepo()
             }
         }
     }
 
+    private fun fetchRemoteRepo() {
+        data.postValue(Response.Loading())
+        viewModelScope.launch {
+            when (val response = remoteRepository.getTrendingFromRemote()) {
+                is Response.Success -> {
+                    data.postValue(response)
+                    refreshRepoList(response.data ?: return@launch)
+                }
+                is Response.Error -> handleError(response.t)
+            }
+        }
+    }
+
+    private fun handleError(t: Throwable?) {
+        error.postValue(t?.toString() ?: "Unknown Exception")
+    }
+
     private fun refreshRepoList(list: List<TrendingEntity>) {
         viewModelScope.launch {
-            dataHelper.insert(list)
+            roomRepository.insert(list)
         }
     }
 }

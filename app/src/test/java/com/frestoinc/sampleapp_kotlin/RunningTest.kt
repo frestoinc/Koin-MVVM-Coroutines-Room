@@ -1,10 +1,10 @@
 package com.frestoinc.sampleapp_kotlin
 
-import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteRepositoryImplTest
+import com.frestoinc.sampleapp_kotlin.api.data.remote.IRemoteRepositoryTest
 import com.frestoinc.sampleapp_kotlin.api.data.remote.RemoteRepositoryTest
-import com.frestoinc.sampleapp_kotlin.api.data.remote.RepoTest
-import com.frestoinc.sampleapp_kotlin.api.data.room.RoomRepositoryImplTest
+import com.frestoinc.sampleapp_kotlin.api.data.remote.TrendingEntityTest
 import com.frestoinc.sampleapp_kotlin.di.CheckModule
+import com.frestoinc.sampleapp_kotlin.repository.trending.RoomRepositoryTest
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
@@ -14,10 +14,10 @@ import org.junit.runners.Suite
 
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
-    RemoteRepositoryImplTest::class,
     RemoteRepositoryTest::class,
-    RepoTest::class,
-    RoomRepositoryImplTest::class,
+    IRemoteRepositoryTest::class,
+    TrendingEntityTest::class,
+    RoomRepositoryTest::class,
     CheckModule::class
 )
 class RunningTest

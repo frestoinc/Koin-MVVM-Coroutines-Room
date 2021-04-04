@@ -23,7 +23,7 @@ abstract class BaseActivity<T : ViewDataBinding>(@LayoutRes private val layoutId
 
     protected abstract val networkHelper: NetworkHelper
 
-    // protected abstract fun getLoadingContainer(): ContentLoadingLayout
+    protected abstract fun getLoadingContainer(): ContentLoadingLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +37,17 @@ abstract class BaseActivity<T : ViewDataBinding>(@LayoutRes private val layoutId
     internal fun notify(@StringRes message: Int) =
         Snackbar.make(findViewById(R.id.content), message, Snackbar.LENGTH_LONG).show()
 
-    internal fun isConnected(): Boolean {
-        return networkHelper.isNetworkConnected()
+    internal fun isConnected(): Boolean = networkHelper.isNetworkConnected()
+
+    internal fun showSnackBarWithAction(message: String, actionText: String, action: () -> Any) {
+        Snackbar.make(findViewById(R.id.content), message, Snackbar.LENGTH_INDEFINITE).apply {
+            setAction(actionText) { action.invoke() }
+            setActionTextColor(getColor(android.R.color.holo_red_dark))
+        }.show()
     }
 
-    internal fun notifyWithAction(message: String, actionText: String, action: () -> Any) {
-        val snackBar =
-            Snackbar.make(findViewById(R.id.content), message, Snackbar.LENGTH_INDEFINITE)
-        snackBar.setAction(actionText) { action.invoke() }
-        snackBar.setActionTextColor(getColor(android.R.color.holo_red_dark))
-        snackBar.show()
+    internal fun showSnackBar(message: String) {
+        Snackbar.make(findViewById(R.id.content), message, Snackbar.LENGTH_LONG).show()
     }
 
 }

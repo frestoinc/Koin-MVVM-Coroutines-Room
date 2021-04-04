@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.frestoinc.sampleapp_kotlin.R
 import com.frestoinc.sampleapp_kotlin.ui.view.expandable.ExpandableState.Companion.getStatusInt
+import kotlin.math.roundToInt
 
 /**
  * Created by frestoinc on 27,February,2020 for SampleApp_Kotlin.
@@ -44,7 +45,7 @@ class ExpandableLayout @JvmOverloads constructor(
         val height = measuredHeight
         val size = if (orientation == LinearLayout.HORIZONTAL) width else height
         visibility = if (expansion == 0f && size == 0) View.GONE else View.VISIBLE
-        val expansionDelta = size - Math.round(size * expansion)
+        val expansionDelta = size - (size * expansion).roundToInt()
         if (parallax > 0) {
             val parallaxDelta = expansionDelta * parallax
             for (i in 0 until childCount) {
@@ -74,7 +75,7 @@ class ExpandableLayout @JvmOverloads constructor(
         super.onConfigurationChanged(newConfig)
     }
 
-    override fun onSaveInstanceState(): Parcelable? {
+    override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
         val bundle = Bundle()
         expansion = if (isExpanded) 1F else 0F
@@ -137,7 +138,7 @@ class ExpandableLayout @JvmOverloads constructor(
      * @param expand  the expand
      * @param animate the animate
      */
-    fun setExpanded(expand: Boolean, animate: Boolean) {
+    private fun setExpanded(expand: Boolean, animate: Boolean) {
         if (expand == isExpanded) {
             return
         }
@@ -163,18 +164,23 @@ class ExpandableLayout @JvmOverloads constructor(
         }
         // Infer state from previous value
         val delta = expansion - this.expansion
-        if (expansion == 0f) {
-            state =
-                getStatusInt(ExpandableState.COLLAPSED)!!
-        } else if (expansion == 1f) {
-            state =
-                getStatusInt(ExpandableState.EXPANDED)!!
-        } else if (delta < 0) {
-            state =
-                getStatusInt(ExpandableState.COLLAPSING)!!
-        } else if (delta > 0) {
-            state =
-                getStatusInt(ExpandableState.EXPANDING)!!
+        when {
+            expansion == 0f ->
+                state =
+                    getStatusInt(ExpandableState.COLLAPSED)!!
+
+            expansion == 1f ->
+                state =
+                    getStatusInt(ExpandableState.EXPANDED)!!
+
+            delta < 0 ->
+                state =
+                    getStatusInt(ExpandableState.COLLAPSING)!!
+
+            delta > 0 ->
+                state =
+                    getStatusInt(ExpandableState.EXPANDING)!!
+
         }
         visibility = if (state == getStatusInt(
                 ExpandableState.COLLAPSED
@@ -191,7 +197,7 @@ class ExpandableLayout @JvmOverloads constructor(
         return parallax
     }
 
-    fun setParallax(lax: Float) { // Make sure parallax is between 0 and 1
+    private fun setParallax(lax: Float) { // Make sure parallax is between 0 and 1
         val parallax = 1f.coerceAtMost(0f.coerceAtLeast(lax))
         this.parallax = parallax
     }

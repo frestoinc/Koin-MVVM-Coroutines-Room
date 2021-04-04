@@ -1,4 +1,4 @@
-package com.frestoinc.sampleapp_kotlin.api.data.room
+package com.frestoinc.sampleapp_kotlin.repository.trending
 
 import com.frestoinc.sampleapp_kotlin.api.domain.response.State
 import com.frestoinc.sampleapp_kotlin.utils.getData
@@ -16,22 +16,22 @@ import org.junit.runners.JUnit4
  * Created by frestoinc on 03,March,2020 for SampleApp_Kotlin.
  */
 @RunWith(JUnit4::class)
-class RoomRepositoryImplTest {
+class RoomRepositoryTest {
 
     @MockK
-    private lateinit var roomDatabase: RepoDatabase
+    private lateinit var roomDatabase: TrendingDatabase
 
     @MockK
-    private lateinit var roomRepository: RoomRepository
+    private lateinit var IRoomRepository: IRoomRepository
 
     private var data = getData(this)
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        roomRepository = RoomRepositoryImpl(roomDatabase)
-        val dao = mockk<RepoDao>()
-        every { roomDatabase.repoDao } returns dao
+        IRoomRepository = RoomRepository(roomDatabase)
+        val dao = mockk<TrendingDao>()
+        every { roomDatabase.trendingDao } returns dao
     }
 
     @After
@@ -42,23 +42,23 @@ class RoomRepositoryImplTest {
     @Test
     fun testErrorHandling() {
         val result = Exception("Fail")
-        coEvery { roomRepository.getRoomRepository() } coAnswers { throw result }
+        coEvery { IRoomRepository.getTrendingFromLocal() } coAnswers { throw result }
 
         runBlocking {
-            assertNotNull(roomRepository.getRoomRepository())
-            assert(roomRepository.getRoomRepository() is State.Error)
+            assertNotNull(IRoomRepository.getTrendingFromLocal())
+            assert(IRoomRepository.getTrendingFromLocal() is State.Error)
         }
 
-        coVerify { roomRepository.getRoomRepository() }
+        coVerify { IRoomRepository.getTrendingFromLocal() }
     }
 
     @Test
     fun testGetLocalRepo() {
-        coEvery { roomRepository.getRoomRepository() } returns State.Success(data)
+        coEvery { IRoomRepository.getTrendingFromLocal() } returns State.Success(data)
 
         runBlocking {
-            assert(roomRepository.getRoomRepository() is State.Success)
-            when (val source = roomRepository.getRoomRepository()) {
+            assert(IRoomRepository.getTrendingFromLocal() is State.Success)
+            when (val source = IRoomRepository.getTrendingFromLocal()) {
                 is State.Success -> {
                     assertNotNull(source.data)
                     assertEquals(source.data, data)
@@ -69,11 +69,11 @@ class RoomRepositoryImplTest {
 
     @Test
     fun testInsertRepo() {
-        coEvery { roomRepository.insert(data) } returns State.Success(Unit)
+        coEvery { IRoomRepository.insert(data) } returns State.Success(Unit)
 
         runBlocking {
-            assert(roomRepository.insert(data) is State.Success)
-            when (val source = roomRepository.insert(data)) {
+            assert(IRoomRepository.insert(data) is State.Success)
+            when (val source = IRoomRepository.insert(data)) {
                 is State.Success -> {
                     assertNotNull(source)
                     assertNull(source.ex)

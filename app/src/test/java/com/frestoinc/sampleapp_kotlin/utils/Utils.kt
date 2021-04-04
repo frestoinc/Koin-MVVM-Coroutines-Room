@@ -1,6 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.utils
 
-import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
+import com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CompletableDeferred
@@ -12,8 +12,8 @@ import java.io.File
 
 fun <T> T.toDeferred() = CompletableDeferred(this)
 
-fun <T : Any> getData(ctx: T): List<Repo> =
-    Gson().fromJson(getJSON(ctx), object : TypeToken<List<Repo>>() {}.type)
+fun <T : Any> getData(ctx: T): List<TrendingEntity> =
+    Gson().fromJson(getJSON(ctx), object : TypeToken<List<TrendingEntity>>() {}.type)
 
 fun <T : Any> getJSON(ctx: T): String {
     val file = File(ctx.javaClass.classLoader?.getResource("mockRepo.json")?.path)

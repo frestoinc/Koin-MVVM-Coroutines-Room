@@ -1,6 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.helpers
 
-import com.frestoinc.sampleapp_kotlin.api.domain.response.State
+import com.frestoinc.sampleapp_kotlin.models.Response
 import com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity
 import com.frestoinc.sampleapp_kotlin.repository.IRemoteRepository
 import com.frestoinc.sampleapp_kotlin.repository.IRoomRepository
@@ -10,11 +10,11 @@ import javax.inject.Inject
 
 interface IDataHelper {
 
-    suspend fun getRemoteRepository(): State<List<TrendingEntity>>
+    suspend fun getRemoteRepository(): Response<List<TrendingEntity>>
 
-    suspend fun getRoomRepository(): State<List<TrendingEntity>>
+    suspend fun getRoomRepository(): Response<List<TrendingEntity>>
 
-    suspend fun insert(data: List<TrendingEntity>): State<Unit>
+    suspend fun insert(data: List<TrendingEntity>)
 }
 
 class DataHelper @Inject constructor(
@@ -22,17 +22,17 @@ class DataHelper @Inject constructor(
     private val roomRepository: IRoomRepository
 ) : IDataHelper {
 
-    override suspend fun getRemoteRepository(): State<List<TrendingEntity>> =
+    override suspend fun getRemoteRepository(): Response<List<TrendingEntity>> =
         withContext(Dispatchers.IO) {
             return@withContext remoteRepository.getTrendingFromRemote()
         }
 
-    override suspend fun getRoomRepository(): State<List<TrendingEntity>> =
+    override suspend fun getRoomRepository(): Response<List<TrendingEntity>> =
         withContext(Dispatchers.IO) {
             return@withContext roomRepository.getTrendingFromLocal()
         }
 
-    override suspend fun insert(data: List<TrendingEntity>): State<Unit> =
+    override suspend fun insert(data: List<TrendingEntity>) =
         withContext(Dispatchers.IO) {
             return@withContext roomRepository.insert(data)
         }

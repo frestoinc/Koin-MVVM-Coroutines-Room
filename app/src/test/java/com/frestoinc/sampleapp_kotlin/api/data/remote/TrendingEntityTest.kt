@@ -1,6 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.api.data.remote
 
-import com.frestoinc.sampleapp_kotlin.api.data.model.Repo
+import com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -11,7 +11,7 @@ import org.mockito.MockitoAnnotations
 /**
  * Created by frestoinc on 27,February,2020 for SampleApp_Kotlin.
  */
-class RepoTest {
+class TrendingEntityTest {
 
     private val author = "author"
 
@@ -34,7 +34,7 @@ class RepoTest {
     private val currentPeriodStars = 3
 
     @Mock
-    lateinit var model: Repo
+    lateinit var model: TrendingEntity
 
     @Before
     fun setUp() {

@@ -3,9 +3,8 @@ package com.frestoinc.sampleapp_kotlin.di
 import android.content.Context
 import androidx.room.Room
 import com.frestoinc.sampleapp_kotlin.BuildConfig
+import com.frestoinc.sampleapp_kotlin.api.ApiCallAdapterFactory
 import com.frestoinc.sampleapp_kotlin.api.trending_api.TrendingService
-import com.frestoinc.sampleapp_kotlin.helpers.DataHelper
-import com.frestoinc.sampleapp_kotlin.helpers.IDataHelper
 import com.frestoinc.sampleapp_kotlin.models.MapDeserializerDoubleAsIntFix
 import com.frestoinc.sampleapp_kotlin.repository.IRemoteRepository
 import com.frestoinc.sampleapp_kotlin.repository.IRoomRepository
@@ -35,6 +34,9 @@ import javax.inject.Singleton
 @Module
 object ApplicationModule {
 
+    private const val TIMEOUT = 20L
+    private const val BASE_URL = "https://gtrend.yapie"
+
     @Provides
     @Singleton
     fun provideHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {
@@ -43,15 +45,16 @@ object ApplicationModule {
                 level = HttpLoggingInterceptor.Level.BODY
             })
         }
-        connectTimeout(20L, TimeUnit.SECONDS)
-        writeTimeout(20L, TimeUnit.SECONDS)
-        readTimeout(20L, TimeUnit.SECONDS)
+        connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+        writeTimeout(TIMEOUT, TimeUnit.SECONDS)
+        readTimeout(TIMEOUT, TimeUnit.SECONDS)
     }.build()
 
     @Provides
     @Singleton
     fun provideRetrofit(url: String): Retrofit = Retrofit.Builder().apply {
         baseUrl(url)
+        addCallAdapterFactory(ApiCallAdapterFactory())
         addConverterFactory(GsonConverterFactory.create(provideGson()))
         addCallAdapterFactory(CoroutineCallAdapterFactory())
         client(provideHttpClient())
@@ -69,7 +72,7 @@ object ApplicationModule {
     @Provides
     @Singleton
     fun provideTrendingService(): TrendingService =
-        provideRetrofit("https://gtrend.yapie.me/").create(TrendingService::class.java)
+        provideRetrofit(BASE_URL).create(TrendingService::class.java)
 
     @Provides
     @Singleton
@@ -91,13 +94,6 @@ object ApplicationModule {
     @Singleton
     fun provideRemoteRepository(trendingService: TrendingService): IRemoteRepository =
         RemoteRepository(trendingService)
-
-    @Provides
-    @Singleton
-    fun provideDataHelper(
-        remoteRepository: IRemoteRepository,
-        roomRepository: IRoomRepository
-    ): IDataHelper = DataHelper(remoteRepository, roomRepository)
 
     @Provides
     @Singleton

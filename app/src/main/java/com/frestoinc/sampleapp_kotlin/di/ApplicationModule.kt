@@ -35,7 +35,7 @@ import javax.inject.Singleton
 object ApplicationModule {
 
     private const val TIMEOUT = 20L
-    private const val BASE_URL = "https://gtrend.yapie"
+    private const val BASE_URL = "https://gh-trending-api.herokuapp.com/"
 
     @Provides
     @Singleton

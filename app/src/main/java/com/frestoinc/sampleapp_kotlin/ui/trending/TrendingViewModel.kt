@@ -1,11 +1,16 @@
 package com.frestoinc.sampleapp_kotlin.ui.trending
 
-import androidx.lifecycle.*
-import com.frestoinc.sampleapp_kotlin.models.Response
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.frestoinc.sampleapp_kotlin.domain.Response
 import com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity
 import com.frestoinc.sampleapp_kotlin.repository.IRemoteRepository
 import com.frestoinc.sampleapp_kotlin.repository.IRoomRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,7 +21,6 @@ class TrendingViewModel @Inject constructor(
 ) : ViewModel() {
 
     val data: MutableLiveData<Response<List<TrendingEntity>>> = MutableLiveData()
-    val error: MutableLiveData<String> = MutableLiveData()
 
     init {
         loadLocal()
@@ -27,30 +31,54 @@ class TrendingViewModel @Inject constructor(
     }
 
     private fun loadLocal() {
-        data.postValue(Response.Loading())
         viewModelScope.launch {
-            when (val response = roomRepository.getTrendingFromLocal()) {
-                is Response.Success -> data.postValue(response)
-                is Response.Error -> fetchRemoteRepo()
-            }
+            roomRepository.getTrendingFromLocal()
+                .onStart { data.postValue(Response.Loading()) }
+                .catch { e -> handleError(e) }
+                .collect {
+                    it.fold(
+                        { list ->
+                            list?.let {
+                                data.postValue(Response.Success(list))
+                            } ?: data.postValue(Response.Success(emptyList()))
+                        }, { error ->
+                            error?.let {
+                                handleError(error)
+                            } ?: handleError(Throwable("Unknown Exception"))
+
+                        }
+                    )
+                }
         }
     }
 
     private fun fetchRemoteRepo() {
         data.postValue(Response.Loading())
         viewModelScope.launch {
-            when (val response = remoteRepository.getTrendingFromRemote()) {
-                is Response.Success -> {
-                    data.postValue(response)
-                    refreshRepoList(response.data ?: return@launch)
+            remoteRepository.getTrendingFromRemote()
+                .onStart { data.postValue(Response.Loading()) }
+                .catch { e -> handleError(e) }
+                .collect {
+                    it.fold(
+                        { list ->
+                            list?.let {
+                                data.postValue(Response.Success(list))
+                                launch {
+                                    refreshRepoList(list)
+                                }
+                            } ?: data.postValue(Response.Success(emptyList()))
+                        }, { error ->
+                            error?.let {
+                                handleError(error)
+                            } ?: handleError(Throwable("Unknown Exception"))
+
+                        })
                 }
-                is Response.Error -> handleError(response.t)
-            }
         }
     }
 
-    private fun handleError(t: Throwable?) {
-        error.postValue(t?.toString() ?: "Unknown Exception")
+    private fun handleError(t: Throwable) {
+        data.postValue(Response.Error(t))
     }
 
     private fun refreshRepoList(list: List<TrendingEntity>) {

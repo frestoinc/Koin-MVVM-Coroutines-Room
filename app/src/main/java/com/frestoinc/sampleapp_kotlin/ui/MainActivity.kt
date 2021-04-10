@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.frestoinc.sampleapp_kotlin.R
 import com.frestoinc.sampleapp_kotlin.base.BaseActivity
 import com.frestoinc.sampleapp_kotlin.databinding.ActivityMainBinding
+import com.frestoinc.sampleapp_kotlin.domain.Response
 import com.frestoinc.sampleapp_kotlin.helpers.NetworkHelper
-import com.frestoinc.sampleapp_kotlin.models.Response
 import com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity
 import com.frestoinc.sampleapp_kotlin.ui.trending.TrendingAdapter
 import com.frestoinc.sampleapp_kotlin.ui.trending.TrendingViewModel
@@ -99,7 +99,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private fun initObservers() {
         observe(viewModel.data, ::onRetrieveData)
-        observe(viewModel.error, ::onFailure)
     }
 
     private fun onRetrieveData(state: Response<List<TrendingEntity>>?) {

@@ -1,4 +1,4 @@
-package com.frestoinc.sampleapp_kotlin.domain
+package com.frestoinc.sampleapp_kotlin.extensions
 
 sealed class Response<T>(val data: T? = null, val t: Throwable? = null) {
 

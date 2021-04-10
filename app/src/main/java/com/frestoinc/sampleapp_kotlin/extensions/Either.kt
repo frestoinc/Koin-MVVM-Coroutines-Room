@@ -1,4 +1,4 @@
-package com.frestoinc.sampleapp_kotlin.domain
+package com.frestoinc.sampleapp_kotlin.extensions
 
 /**
  * Created by frestoinc on 11,April,2020 for SampleApp_Kotlin.

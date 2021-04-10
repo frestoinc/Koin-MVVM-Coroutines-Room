@@ -2,7 +2,7 @@ package com.frestoinc.sampleapp_kotlin.repository
 
 import com.frestoinc.sampleapp_kotlin.api.ApiResponse
 import com.frestoinc.sampleapp_kotlin.api.trending_api.TrendingService
-import com.frestoinc.sampleapp_kotlin.domain.Either
+import com.frestoinc.sampleapp_kotlin.extensions.Either
 import com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

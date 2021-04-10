@@ -1,6 +1,6 @@
 package com.frestoinc.sampleapp_kotlin.repository
 
-import com.frestoinc.sampleapp_kotlin.domain.Either
+import com.frestoinc.sampleapp_kotlin.extensions.Either
 import com.frestoinc.sampleapp_kotlin.models.trending_api.TrendingEntity
 import com.frestoinc.sampleapp_kotlin.repository.trending.TrendingDao
 import kotlinx.coroutines.Dispatchers

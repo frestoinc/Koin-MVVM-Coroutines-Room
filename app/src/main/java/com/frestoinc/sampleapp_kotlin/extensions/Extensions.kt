@@ -1,4 +1,4 @@
-package com.frestoinc.sampleapp_kotlin.ui.view
+package com.frestoinc.sampleapp_kotlin.extensions
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -15,8 +15,20 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.frestoinc.sampleapp_kotlin.R
 import com.frestoinc.sampleapp_kotlin.di.GlideApp
+import kotlinx.coroutines.Job
+
+/**
+ * Created by frestoinc on 10,April,2021 for SampleApp_Kotlin.
+ */
+
 
 const val error: String = "Error"
+
+fun Job?.cancelIfActive() {
+    if (this?.isActive == true) {
+        cancel()
+    }
+}
 
 fun <T : Any, L : LiveData<T>> LifecycleOwner.observe(liveData: L, body: (T?) -> Unit) =
     liveData.observe(this, Observer(body))

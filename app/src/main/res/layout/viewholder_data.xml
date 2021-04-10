@@ -11,7 +11,7 @@
 
         <variable
             name="appview"
-            type="com.frestoinc.sampleapp_kotlin.ui.view.ViewKt" />
+            type="com.frestoinc.sampleapp_kotlin.extensions.ExtensionsKt" />
 
         <variable
             name="model"
